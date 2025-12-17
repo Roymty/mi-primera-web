@@ -8,27 +8,21 @@ const respuesta = document.getElementById("respuesta");
 
 btnSi.addEventListener("click", () => {
     localStorage.setItem("respuestaInvitacion", "Sí");
-    respuesta.textContent = "💖 Gracias por aceptar, me hará mucha ilusión.";
-    //ocultarBotones();
+    respuesta.textContent = "💖 Ella respondió: Sí";
 });
 
 btnNo.addEventListener("click", () => {
     localStorage.setItem("respuestaInvitacion", "No");
-    respuesta.textContent = "✨ Gracias por tu sinceridad.";
-    ocultarBotones();
+    respuesta.textContent = "✨ Ella respondió: No";
 });
+
 
 const respuestaGuardada = localStorage.getItem("respuestaInvitacion");
 
-if (respuestaGuardada === "Sí") {
-    respuesta.textContent = "💖 Ella aceptó la invitación.";
-    ocultarBotones();
+if (respuestaGuardada) {
+    respuesta.textContent = "📌 Respuesta guardada: " + respuestaGuardada;
 }
 
-if (respuestaGuardada === "No") {
-    respuesta.textContent = "✨ Ella respondió que no.";
-    ocultarBotones();
-}
 
 
 
