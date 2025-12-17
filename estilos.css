@@ -27,7 +27,10 @@ button:hover {
    
 }   
     
-
+img {
+    border-radius: 50%;
+    margin-top: 15px;
+}
 
 h1 {
     margin-bottom: 5px;
