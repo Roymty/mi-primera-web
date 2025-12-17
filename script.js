@@ -1,12 +1,23 @@
-function cambiarColor() {
-    const contenedor = document.querySelector(".contenedor");
+const btnTexto = document.getElementById("btnTexto");
+const btnMostrar = document.getElementById("btnMostrar");
+const btnColor = document.getElementById("btnColor");
 
-    if (contenedor.style.backgroundColor === "white") {
-        contenedor.style.backgroundColor = "#f3e8ff";
-    } else {
-        contenedor.style.backgroundColor = "white";
-    }
-}
+const mensaje = document.getElementById("mensaje");
+const extra = document.getElementById("extra");
+const contenedor = document.querySelector(".contenedor");
+
+btnTexto.addEventListener("click", () => {
+    mensaje.textContent = "¡Texto cambiado con evento profesional!";
+});
+
+btnMostrar.addEventListener("click", () => {
+    extra.style.display = extra.style.display === "none" ? "block" : "none";
+});
+
+btnColor.addEventListener("click", () => {
+    contenedor.style.backgroundColor =
+        contenedor.style.backgroundColor === "white" ? "#f3e8ff" : "white";
+});
 
 
 
