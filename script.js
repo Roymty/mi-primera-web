@@ -1,4 +1,4 @@
-function saludar() {
-    document.getElementById("mensaje").innerText =
-        "Gracias por hacer clic 😊 ¡Sigo aprendiendo!";
+function cambiarTexto() {
+    document.getElementById("mensaje").textContent = "¡Este texto cambió con JavaScript!";
 }
+
