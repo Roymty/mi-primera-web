@@ -1,23 +1,19 @@
-const btnTexto = document.getElementById("btnTexto");
-const btnMostrar = document.getElementById("btnMostrar");
-const btnColor = document.getElementById("btnColor");
+const btnSi = document.getElementById("btnSi");
+const btnNo = document.getElementById("btnNo");
+const respuesta = document.getElementById("respuesta");
 
-const mensaje = document.getElementById("mensaje");
-const extra = document.getElementById("extra");
-const contenedor = document.querySelector(".contenedor");
-
-btnTexto.addEventListener("click", () => {
-    mensaje.textContent = "¡Texto cambiado con evento profesional!";
+// Cuando presiona SÍ
+btnSi.addEventListener("click", () => {
+    localStorage.setItem("respuestaInvitacion", "Sí");
+    respuesta.textContent = "💖 Gracias por aceptar, me hará mucha ilusión.";
 });
 
-btnMostrar.addEventListener("click", () => {
-    extra.style.display = extra.style.display === "none" ? "block" : "none";
+// Cuando presiona NO
+btnNo.addEventListener("click", () => {
+    localStorage.setItem("respuestaInvitacion", "No");
+    respuesta.textContent = "✨ Gracias por tu sinceridad.";
 });
 
-btnColor.addEventListener("click", () => {
-    contenedor.style.backgroundColor =
-        contenedor.style.backgroundColor === "white" ? "#f3e8ff" : "white";
-});
 
 
 
