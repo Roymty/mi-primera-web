@@ -20,6 +20,10 @@ button:hover {
 .contenedor {
     background-color: white;
     width: 320px;
+    margin: 100px auto;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 
 }   
     
@@ -42,5 +46,6 @@ p {
     font-size: 14px;
     line-height: 1.5;
 }
+
 
 
