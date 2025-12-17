@@ -18,11 +18,12 @@ button:hover {
 }
 
 .contenedor {
-    background-color: white;
-    width: 450px;
+ background-color: white;
+    width: 320px;
     margin: 100px auto;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }   
     
 img {
@@ -44,3 +45,4 @@ p {
     font-size: 14px;
     line-height: 1.5;
 }
+
