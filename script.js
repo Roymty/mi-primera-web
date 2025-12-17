@@ -1,10 +1,10 @@
-function mostrarOcultar() {
-    const texto = document.getElementById("extra");
+function cambiarColor() {
+    const contenedor = document.querySelector(".contenedor");
 
-    if (texto.style.display === "none") {
-        texto.style.display = "block";
+    if (contenedor.style.backgroundColor === "white") {
+        contenedor.style.backgroundColor = "#f3e8ff";
     } else {
-        texto.style.display = "none";
+        contenedor.style.backgroundColor = "white";
     }
 }
 
