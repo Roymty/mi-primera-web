@@ -1,8 +1,7 @@
-function ocultarBotones() {
-    btnSi.style.display = "none";
-    btnNo.style.display = "none";
-}
-
+function ocultarBotones()// {//
+    btnSi.style.display = "none";//
+    btnNo.style.display = "none";//
+}//
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const respuesta = document.getElementById("respuesta");
@@ -30,6 +29,7 @@ if (respuestaGuardada === "No") {
     respuesta.textContent = "✨ Ella respondió que no.";
     ocultarBotones();
 }
+
 
 
 
