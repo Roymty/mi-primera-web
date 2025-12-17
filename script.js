@@ -1,4 +1,11 @@
-function cambiarTexto() {
-    document.getElementById("mensaje").textContent = "¡Este texto cambió con JavaScript!";
+function mostrarOcultar() {
+    const texto = document.getElementById("extra");
+
+    if (texto.style.display === "none") {
+        texto.style.display = "block";
+    } else {
+        texto.style.display = "none";
+    }
 }
+
 
