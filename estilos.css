@@ -1,63 +1,64 @@
 body {
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(to bottom right, #ffe6e6, #fff0f5);
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
   min-height: 100vh;
-  padding: 20px;
+  text-align: center;
+  padding-top: 40px;
 }
 
-h2 {
-  margin-bottom: 30px;
-  color: #d6336c;
-  text-shadow: 1px 1px 2px #fff;
+.card {
+  background: white;
+  width: 90%;
+  max-width: 400px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.botones {
+  margin-top: 20px;
 }
 
 button {
-  background-color: #ff69b4;
-  color: white;
-  border: none;
-  padding: 15px 30px;
+  padding: 12px 22px;
   margin: 10px;
-  font-size: 18px;
-  border-radius: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
   cursor: pointer;
-  transition: transform 0.2s, background-color 0.2s;
+  color: white;
+  background: #ff5f6d;
+  transition: transform 0.2s;
 }
 
 button:hover {
-  background-color: #ff85c1;
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
-.respuesta {
-  background-color: #fff0f5;
-  border: 2px solid #ffb6c1;
-  border-radius: 10px;
-  padding: 10px 15px;
-  margin: 5px 0;
-  width: 250px;
-  text-align: center;
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+#mensaje {
+  margin-top: 20px;
+  font-weight: bold;
 }
 
-.respuesta h3 {
+.admin-login {
   margin-top: 30px;
-  color: #d6336c;
 }
 
-#respuestas {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 10px;
+.admin-login input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-
-
+.admin {
+  background: white;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+}
 
 
 
