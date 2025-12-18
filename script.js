@@ -90,8 +90,13 @@ formulario.addEventListener("submit", async (e) => {
     fecha: new Date()
   });
 
+  // ocultar mensaje anterior
+  mensajeFinal.style.display = "none";
+
+  // mostrar mensaje final bonito
   formulario.innerHTML = "<p>Gracias, lo tomaré en cuenta 😊</p>";
 });
+
 
 /* ADMIN */
 const adminToggle = document.getElementById("adminToggle");
@@ -120,5 +125,6 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
