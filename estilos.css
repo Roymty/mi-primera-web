@@ -1,67 +1,158 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Georgia', serif;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-  min-height: 100vh;
-  text-align: center;
-  padding-top: 40px;
+  height: 100vh;
+  background: linear-gradient(135deg, #f6f6f6, #eaeaea);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  padding: 20px;
 }
 
 .card {
   background: white;
-  width: 90%;
-  max-width: 400px;
-  margin: auto;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  padding: 50px 40px;
+  max-width: 420px;
+  text-align: center;
+  border-radius: 18px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+  animation: aparecer 1s ease;
 }
 
-.botones {
-  margin-top: 20px;
+h1 {
+  font-weight: normal;
+  margin-bottom: 15px;
 }
 
-button {
-  padding: 12px 22px;
-  margin: 10px;
-  font-size: 16px;
-  border: none;
+.texto {
+  color: #444;
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+.acciones {
+  margin-top: 35px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn {
+  padding: 12px 28px;
   border-radius: 30px;
+  border: none;
+  font-size: 0.95rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.si {
+  background: #111;
   color: white;
-  background: #ff5f6d;
-  transition: transform 0.2s;
 }
 
-button:hover {
-  transform: scale(1.1);
+.no {
+  background: transparent;
+  border: 1px solid #aaa;
+  color: #555;
 }
 
-#mensaje {
-  margin-top: 20px;
-  font-weight: bold;
+.btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
 }
 
-.admin-login {
+.mensaje {
   margin-top: 30px;
+  font-style: italic;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
-.admin-login input {
-  padding: 8px;
-  border-radius: 5px;
+/* FORMULARIO */
+.formulario {
+  margin-top: 30px;
+  animation: aparecer 0.6s ease;
+}
+
+.formulario input,
+.formulario textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
   border: 1px solid #ccc;
 }
 
-.admin {
-  background: white;
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 10px;
+.formulario button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 25px;
+  background: #111;
+  color: white;
+  cursor: pointer;
 }
 
+.formulario button:hover {
+  opacity: 0.85;
+}
 
+.oculto {
+  display: none;
+}
 
+/* ADMIN */
+.admin {
+  position: fixed;
+  bottom: 12px;
+  right: 14px;
+}
 
+#adminToggle {
+  cursor: pointer;
+  color: #aaa;
+  font-size: 20px;
+}
+
+.admin-panel {
+  display: none;
+  margin-top: 10px;
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.admin-panel input {
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 8px;
+}
+
+.admin-panel button {
+  width: 100%;
+  padding: 6px;
+  cursor: pointer;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 
