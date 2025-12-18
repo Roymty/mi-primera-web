@@ -2,45 +2,54 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Invitación 💙</title>
+  <title>Invitación</title>
   <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
 
-  <div class="card">
-    <h1>Hola 💙</h1>
-    <p>
-      Me gustaría invitarte a comer un día de estos,
-      sin presión, solo pasar un buen rato 😊
-    </p>
+  <main class="container">
+    <section class="card">
+      <h1>Hola</h1>
 
-    <div class="botones">
-      <button onclick="guardarRespuesta('Sí')">Sí 😊</button>
-      <button onclick="guardarRespuesta('No')">No 😌</button>
+      <p class="texto">
+        Me gustaría invitarte a comer un día de estos,  
+        sin compromiso, solo compartir un buen momento.
+      </p>
+
+      <div class="acciones">
+        <button class="btn si" id="btnSi">Sí</button>
+        <button class="btn no" id="btnNo">No</button>
+      </div>
+
+      <p id="mensaje" class="mensaje"></p>
+
+      <!-- FORMULARIO (solo aparece si dice SÍ) -->
+      <form id="formulario" class="formulario oculto">
+        <h3>Un pequeño detalle 💙</h3>
+
+        <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required>
+        <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required>
+        <textarea id="comentario" placeholder="Algo que quieras decir (opcional)"></textarea>
+
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- ADMIN DISCRETO -->
+  <div class="admin">
+    <span id="adminToggle">•</span>
+
+    <div class="admin-panel" id="adminPanel">
+      <input type="password" id="adminPass" placeholder="Contraseña">
+      <button id="verDatos">Ver respuestas</button>
+      <div id="resultadoAdmin"></div>
     </div>
-
-    <p id="mensaje"></p>
-  </div>
-
-  <hr>
-
-  <!-- Área privada -->
-  <div class="admin-login">
-    <h3>Admin</h3>
-    <input type="password" id="password" placeholder="Contraseña">
-    <button onclick="verResultados()">Entrar</button>
-  </div>
-
-  <div id="admin" class="admin" style="display:none;">
-    <h4>Respuestas guardadas</h4>
-    <ul id="listaRespuestas"></ul>
   </div>
 
   <script type="module" src="script.js"></script>
 </body>
 </html>
-
-
 
 
 
