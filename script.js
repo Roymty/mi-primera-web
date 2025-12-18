@@ -6,7 +6,7 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 PEGA AQUÍ TUS DATOS REALES */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -25,7 +25,7 @@ const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
 const formulario = document.getElementById("formulario");
 
-/* GUARDAR RESPUESTA */
+/* FUNCIÓN PRINCIPAL */
 async function guardarRespuesta(respuesta) {
   await addDoc(collection(db, "respuestas"), {
     respuesta,
@@ -35,11 +35,9 @@ async function guardarRespuesta(respuesta) {
   mensaje.textContent = "Gracias por responder.";
   mensaje.style.opacity = 1;
 
-  // ocultar botones
   btnSi.style.display = "none";
   btnNo.style.display = "none";
 
-  // desaparecer mensaje
   setTimeout(() => {
     mensaje.classList.add("desaparecer");
   }, 2000);
@@ -48,47 +46,21 @@ async function guardarRespuesta(respuesta) {
     mensaje.style.display = "none";
 
     if (respuesta === "Sí") {
-      document.getElementById("invitacion")
-        .classList.add("desaparecer");
-
-      document.getElementById("mensajeFinal")
-        .classList.remove("oculto");
-
+      document.getElementById("invitacion").classList.add("desaparecer");
+      document.getElementById("mensajeFinal").classList.remove("oculto");
       formulario.classList.remove("oculto");
     }
 
     if (respuesta === "No") {
-      document.getElementById("mensajeNo")
-        .classList.remove("oculto");
+      document.getElementById("mensajeNo").classList.remove("oculto");
     }
-
   }, 2600);
 }
 
-
-// ocultar después de 2 segundos
-setTimeout(() => {
-  mensaje.classList.add("desaparecer");
-}, 2000);
-
-setTimeout(() => {
-  mensaje.style.display = "none";
-}, 2600);
-
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
-}
-
 /* BOTONES */
-btnSi.addEventListener("click", async () => {
-  await guardarRespuesta("Sí");
-
-  document.getElementById("invitacion")
-    .classList.add("desaparecer");
-
-  formulario.classList.remove("oculto");
+btnSi.addEventListener("click", () => {
+  guardarRespuesta("Sí");
 });
-
 
 btnNo.addEventListener("click", () => {
   guardarRespuesta("No");
@@ -135,16 +107,5 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
-
-
-
-
-
-
-
-
-
-
-
 
 
