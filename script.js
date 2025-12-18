@@ -32,8 +32,13 @@ async function guardarRespuesta(respuesta) {
     fecha: new Date()
   });
 
-  mensaje.textContent = "Gracias por responder.";
-  mensaje.style.opacity = 1;
+mensaje.textContent = "Gracias por responder.";
+mensaje.style.opacity = 1;
+
+// ocultar después de 2 segundos
+setTimeout(() => {
+  mensaje.classList.add("desaparecer");
+}, 2000);
 
   btnSi.style.display = "none";
   btnNo.style.display = "none";
@@ -95,6 +100,7 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
 
