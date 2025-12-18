@@ -1,32 +1,66 @@
-//function ocultarBotones() {
-    //btnSi.style.display = "none";
-   // btnNo.style.display = "none";
-//}
-const btnSi = document.getElementById("btnSi");
-const btnNo = document.getElementById("btnNo");
-const respuesta = document.getElementById("respuesta");
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-btnSi.addEventListener("click", () => {
-    localStorage.setItem("respuestaInvitacion", "Sí");
-    respuesta.textContent = "💖 Ella respondió: Sí";
-});
+const firebaseConfig = {
+  apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
+  authDomain: "invitacion-web-84d4f.firebaseapp.com",
+  projectId: "invitacion-web-84d4f",
+  storageBucket: "invitacion-web-84d4f.firebasestorage.app",
+  messagingSenderId: "743465964686",
+  appId: "1:743465964686:web:f9dca07e62862fe47ee5df"
+};
 
-btnNo.addEventListener("click", () => {
-    localStorage.setItem("respuestaInvitacion", "No");
-    respuesta.textContent = "✨ Ella respondió: No";
-});
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
+// Guardar respuesta
+window.guardarRespuesta = async function(respuesta) {
 
-const respuestaGuardada = localStorage.getItem("respuestaInvitacion");
+  if (localStorage.getItem("respondido")) {
+    document.getElementById("mensaje").innerText =
+      "Ya respondiste antes 💙";
+    return;
+  }
 
-if (respuestaGuardada) {
-    respuesta.textContent = "📌 Respuesta guardada: " + respuestaGuardada;
-}
+  await addDoc(collection(db, "respuestas"), {
+    respuesta: respuesta,
+    fecha: new Date()
+  });
 
+  localStorage.setItem("respondido", respuesta);
 
+  document.getElementById("mensaje").innerText =
+    respuesta === "Sí"
+      ? "💙 Gracias por aceptar 😊"
+      : "✨ Gracias por responder";
+};
 
+// Área privada
+window.verResultados = async function () {
 
+  const contraseñaCorrecta = "1234"; // 🔐 CAMBIA ESTO
+  const ingresada = document.getElementById("password").value;
 
+  if (ingresada !== contraseñaCorrecta) {
+    alert("Contraseña incorrecta");
+    return;
+  }
+
+  document.getElementById("admin").style.display = "block";
+
+  const lista = document.getElementById("listaRespuestas");
+  lista.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "respuestas"));
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    const li = document.createElement("li");
+    li.textContent =
+      `${data.respuesta} — ${data.fecha.toDate().toLocaleString()}`;
+    lista.appendChild(li);
+  });
+};
 
 
 
