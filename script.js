@@ -40,6 +40,10 @@ setTimeout(() => {
   mensaje.classList.add("desaparecer");
 }, 2000);
 
+setTimeout(() => {
+  mensaje.style.display = "none";
+}, 2600);
+
   btnSi.style.display = "none";
   btnNo.style.display = "none";
 }
@@ -100,6 +104,7 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
 
