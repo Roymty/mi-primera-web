@@ -33,28 +33,34 @@ async function guardarRespuesta(respuesta) {
   });
 
   mensaje.textContent = "Gracias por responder.";
+  mensaje.style.display = "block";
   mensaje.style.opacity = 1;
 
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
-
+  // ⏱️ DURACIÓN EXACTA: 3 SEGUNDOS
   setTimeout(() => {
     mensaje.classList.add("desaparecer");
-  }, 2000);
+  }, 3000);
 
   setTimeout(() => {
     mensaje.style.display = "none";
 
     if (respuesta === "Sí") {
-      document.getElementById("invitacion").classList.add("desaparecer");
-      document.getElementById("mensajeFinal").classList.remove("oculto");
-      formulario.classList.remove("oculto");
+      const mensajeFinal = document.getElementById("mensajeFinal");
+      mensajeFinal.classList.remove("oculto");
+      mensajeFinal.style.opacity = 1;
     }
 
     if (respuesta === "No") {
-      document.getElementById("mensajeNo").classList.remove("oculto");
+      const mensajeNo = document.getElementById("mensajeNo");
+      mensajeNo.classList.remove("oculto");
+      mensajeNo.style.opacity = 1;
     }
-  }, 2600);
+
+  }, 3600);
+
+  // Ocultar botones suavemente
+  btnSi.style.display = "none";
+  btnNo.style.display = "none";
 }
 
 /* BOTONES */
@@ -107,5 +113,6 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
