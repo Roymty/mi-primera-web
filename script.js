@@ -37,26 +37,27 @@ async function guardarRespuesta(respuesta) {
   mensaje.style.opacity = 1;
 
   // ⏱️ DURACIÓN EXACTA: 3 SEGUNDOS
-  setTimeout(() => {
-    mensaje.classList.add("desaparecer");
-  }, 3000);
+  
+setTimeout(() => {
+  mensaje.classList.add("desaparecer");
+}, 800);
 
-  setTimeout(() => {
-    mensaje.style.display = "none";
+setTimeout(() => {
+  mensaje.style.display = "none";
 
-    if (respuesta === "Sí") {
-      const mensajeFinal = document.getElementById("mensajeFinal");
-      mensajeFinal.classList.remove("oculto");
-      mensajeFinal.style.opacity = 1;
-    }
+  if (respuesta === "Sí") {
+    const mensajeFinal = document.getElementById("mensajeFinal");
+    mensajeFinal.classList.remove("oculto");
+    mensajeFinal.style.opacity = 1;
+  }
 
-    if (respuesta === "No") {
-      const mensajeNo = document.getElementById("mensajeNo");
-      mensajeNo.classList.remove("oculto");
-      mensajeNo.style.opacity = 1;
-    }
+  if (respuesta === "No") {
+    const mensajeNo = document.getElementById("mensajeNo");
+    mensajeNo.classList.remove("oculto");
+    mensajeNo.style.opacity = 1;
+  }
 
-  }, 3600);
+}, 1200);
 
   // Ocultar botones suavemente
   btnSi.style.display = "none";
@@ -113,6 +114,7 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
 
