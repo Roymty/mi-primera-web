@@ -32,21 +32,38 @@ async function guardarRespuesta(respuesta) {
     fecha: new Date()
   });
 
-mensaje.textContent = "Gracias por responder.";
-mensaje.style.opacity = 1;
+  mensaje.textContent = "Gracias por responder.";
+  mensaje.style.opacity = 1;
 
-setTimeout(() => {
-  mensaje.classList.add("desaparecer");
-}, 2000);
+  // ocultar botones
+  btnSi.style.display = "none";
+  btnNo.style.display = "none";
 
-setTimeout(() => {
-  mensaje.style.display = "none";
+  // desaparecer mensaje
+  setTimeout(() => {
+    mensaje.classList.add("desaparecer");
+  }, 2000);
 
-  const mensajeFinal = document.getElementById("mensajeFinal");
-  mensajeFinal.classList.remove("oculto");
-  mensajeFinal.style.opacity = 1;
+  setTimeout(() => {
+    mensaje.style.display = "none";
 
-}, 2600);
+    if (respuesta === "Sí") {
+      document.getElementById("invitacion")
+        .classList.add("desaparecer");
+
+      document.getElementById("mensajeFinal")
+        .classList.remove("oculto");
+
+      formulario.classList.remove("oculto");
+    }
+
+    if (respuesta === "No") {
+      document.getElementById("mensajeNo")
+        .classList.remove("oculto");
+    }
+
+  }, 2600);
+}
 
 
 // ocultar después de 2 segundos
@@ -118,6 +135,7 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
 
