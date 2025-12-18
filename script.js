@@ -35,6 +35,20 @@ async function guardarRespuesta(respuesta) {
 mensaje.textContent = "Gracias por responder.";
 mensaje.style.opacity = 1;
 
+setTimeout(() => {
+  mensaje.classList.add("desaparecer");
+}, 2000);
+
+setTimeout(() => {
+  mensaje.style.display = "none";
+
+  const mensajeFinal = document.getElementById("mensajeFinal");
+  mensajeFinal.classList.remove("oculto");
+  mensajeFinal.style.opacity = 1;
+
+}, 2600);
+
+
 // ocultar después de 2 segundos
 setTimeout(() => {
   mensaje.classList.add("desaparecer");
@@ -104,6 +118,7 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
 
