@@ -38,7 +38,7 @@ window.guardarRespuesta = async function(respuesta) {
 // Área privada
 window.verResultados = async function () {
 
-  const contraseñaCorrecta = "1234"; // 🔐 CAMBIA ESTO
+  const contraseñaCorrecta = "1349164"; // 🔐 CAMBIA ESTO
   const ingresada = document.getElementById("password").value;
 
   if (ingresada !== contraseñaCorrecta) {
@@ -61,6 +61,7 @@ window.verResultados = async function () {
     lista.appendChild(li);
   });
 };
+
 
 
 
