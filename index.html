@@ -2,49 +2,45 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Invitación</title>
+  <title>Invitación 💙</title>
   <link rel="stylesheet" href="estilos.css">
-
 </head>
 <body>
 
-  <h1>¿Aceptas la invitación?</h1>
+  <div class="card">
+    <h1>Hola 💙</h1>
+    <p>
+      Me gustaría invitarte a comer un día de estos,
+      sin presión, solo pasar un buen rato 😊
+    </p>
 
-  <button onclick="guardarRespuesta('Sí')">Sí</button>
-  <button onclick="guardarRespuesta('No')">No</button>
+    <div class="botones">
+      <button onclick="guardarRespuesta('Sí')">Sí 😊</button>
+      <button onclick="guardarRespuesta('No')">No 😌</button>
+    </div>
 
-  <p id="mensaje"></p>
+    <p id="mensaje"></p>
+  </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <hr>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
-      authDomain: "invitacion-web-84d4f.firebaseapp.com",
-      projectId: "invitacion-web-84d4f",
-      storageBucket: "invitacion-web-84d4f.firebasestorage.app",
-      messagingSenderId: "743465964686",
-      appId: "1:743465964686:web:f9dca07e62862fe47ee5df"
-    };
+  <!-- Área privada -->
+  <div class="admin-login">
+    <h3>Área privada</h3>
+    <input type="password" id="password" placeholder="Contraseña">
+    <button onclick="verResultados()">Entrar</button>
+  </div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  <div id="admin" class="admin" style="display:none;">
+    <h4>Respuestas guardadas</h4>
+    <ul id="listaRespuestas"></ul>
+  </div>
 
-    window.guardarRespuesta = async function(respuesta) {
-      await addDoc(collection(db, "respuestas"), {
-        respuesta: respuesta,
-        fecha: new Date()
-      });
-
-      document.getElementById("mensaje").innerText =
-        "Respuesta guardada ❤️";
-    };
-  </script>
-
+  <script type="module" src="script.js"></script>
 </body>
 </html>
+
+
 
 
 
