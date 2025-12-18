@@ -97,7 +97,6 @@ formulario.addEventListener("submit", async (e) => {
   formulario.innerHTML = "<p>Gracias, lo tomaré en cuenta 😊</p>";
 });
 
-
 /* ADMIN */
 const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
@@ -115,16 +114,40 @@ verDatos.addEventListener("click", async () => {
     return;
   }
 
-  const datos = await getDocs(collection(db, "detalles"));
-  resultadoAdmin.innerHTML = "";
+  resultadoAdmin.innerHTML = "<h4>Respuestas</h4>";
 
-  datos.forEach(doc => {
+  // SI / NO
+  const respuestasSnap = await getDocs(collection(db, "respuestas"));
+
+  respuestasSnap.forEach(doc => {
+    const r = doc.data();
+    resultadoAdmin.innerHTML += `
+      <p><strong>Respuesta:</strong> ${r.respuesta}</p>
+    `;
+  });
+
+  resultadoAdmin.innerHTML += "<hr><h4>Detalles</h4>";
+
+  // DETALLES
+  const detallesSnap = await getDocs(collection(db, "detalles"));
+
+  if (detallesSnap.empty) {
+    resultadoAdmin.innerHTML += "<p>No hay detalles adicionales</p>";
+  }
+
+  detallesSnap.forEach(doc => {
     const d = doc.data();
     resultadoAdmin.innerHTML += `
-      <p><strong>${d.comida}</strong> – ${d.lugar}</p>
+      <p>
+        🍽️ ${d.comida}<br>
+        📍 ${d.lugar}<br>
+        💬 ${d.comentario || "Sin comentario"}
+      </p>
     `;
   });
 });
+
+
 
 
 
