@@ -42,8 +42,13 @@ async function guardarRespuesta(respuesta) {
 /* BOTONES */
 btnSi.addEventListener("click", async () => {
   await guardarRespuesta("Sí");
+
+  document.getElementById("invitacion")
+    .classList.add("desaparecer");
+
   formulario.classList.remove("oculto");
 });
+
 
 btnNo.addEventListener("click", () => {
   guardarRespuesta("No");
@@ -90,6 +95,7 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
 
