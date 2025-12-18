@@ -6,7 +6,7 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* FIREBASE CONFIG */
+/* 🔥 CONFIGURACIÓN FIREBASE (LA TUYA) */
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -24,44 +24,50 @@ const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
 const formulario = document.getElementById("formulario");
+const invitacion = document.getElementById("invitacion");
+const mensajeFinal = document.getElementById("mensajeFinal");
+const mensajeNo = document.getElementById("mensajeNo");
 
-/* FUNCIÓN PRINCIPAL */
+/* FUNCIÓN GUARDAR RESPUESTA */
 async function guardarRespuesta(respuesta) {
   await addDoc(collection(db, "respuestas"), {
     respuesta,
     fecha: new Date()
   });
 
-  mensaje.textContent = "Gracias por responder.";
-  mensaje.style.display = "block";
-  mensaje.style.opacity = 1;
-
-  // ⏱️ DURACIÓN EXACTA: 3 SEGUNDOS
-  
-setTimeout(() => {
-  mensaje.classList.add("desaparecer");
-}, 800);
-
-setTimeout(() => {
-  mensaje.style.display = "none";
-
-  if (respuesta === "Sí") {
-    const mensajeFinal = document.getElementById("mensajeFinal");
-    mensajeFinal.classList.remove("oculto");
-    mensajeFinal.style.opacity = 1;
-  }
-
-  if (respuesta === "No") {
-    const mensajeNo = document.getElementById("mensajeNo");
-    mensajeNo.classList.remove("oculto");
-    mensajeNo.style.opacity = 1;
-  }
-
-}, 1200);
-
-  // Ocultar botones suavemente
+  // ocultar botones
   btnSi.style.display = "none";
   btnNo.style.display = "none";
+
+  // ocultar invitación
+  invitacion.classList.add("desaparecer");
+
+  // mostrar mensaje gracias
+  mensaje.textContent = "Gracias por responder.";
+  mensaje.style.opacity = 1;
+
+  // desaparecer mensaje gracias
+  setTimeout(() => {
+    mensaje.classList.add("desaparecer");
+  }, 800);
+
+  // mostrar siguiente contenido
+  setTimeout(() => {
+    mensaje.style.display = "none";
+
+    if (respuesta === "Sí") {
+      mensajeFinal.classList.remove("oculto");
+      mensajeFinal.style.opacity = 1;
+
+      // mostrar formulario
+      formulario.classList.remove("oculto");
+    }
+
+    if (respuesta === "No") {
+      mensajeNo.classList.remove("oculto");
+      mensajeNo.style.opacity = 1;
+    }
+  }, 1200);
 }
 
 /* BOTONES */
@@ -114,7 +120,5 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
-
-
 
 
