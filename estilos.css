@@ -206,6 +206,14 @@ h1 {
   animation: aparecer 1s ease;
 }
 
+.container {
+  width: 100%;
+}
+
+.card {
+  width: 100%;
+}
+
 /* ANIMACIONES */
 @keyframes aparecer {
   from {
@@ -274,6 +282,7 @@ h1 {
     transform: translateX(-80px);
   }
 }
+
 
 
 
