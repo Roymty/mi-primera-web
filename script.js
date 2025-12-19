@@ -70,30 +70,52 @@ async function guardarRespuesta(respuesta) {
   }, 1200);
 }
 
+let respuestaActual = null;
 /* BOTONES */
 btnSi.addEventListener("click", () => {
-  guardarRespuesta("Sí");
+  respuestaActual = "Sí";
+
+  document.getElementById("invitacion")
+    .classList.add("desaparecer");
+
+  mensaje.textContent = "Perfecto, ahora cuéntame un poco más 😊";
+  mensaje.style.opacity = 1;
+
+  btnSi.style.display = "none";
+  btnNo.style.display = "none";
+
+  setTimeout(() => {
+    formulario.classList.remove("oculto");
+  }, 300);
 });
 
-btnNo.addEventListener("click", () => {
-  guardarRespuesta("No");
+btnNo.addEventListener("click", async () => {
+  await addDoc(collection(db, "respuestas"), {
+    respuesta: "No",
+    fecha: new Date()
+  });
+
+  document.getElementById("invitacion").classList.add("desaparecer");
+  btnSi.style.display = "none";
+  btnNo.style.display = "none";
+
+  mensaje.textContent = "Está bien, gracias por tu sinceridad 😊";
+  mensaje.style.opacity = 1;
 });
+
 
 /* FORMULARIO */
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  await addDoc(collection(db, "detalles"), {
+  await addDoc(collection(db, "respuestas"), {
+    respuesta: respuestaActual,
     comida: document.getElementById("comida").value,
     lugar: document.getElementById("lugar").value,
     comentario: document.getElementById("comentario").value,
     fecha: new Date()
   });
 
-  // ocultar mensaje anterior
-  mensajeFinal.style.display = "none";
-
-  // mostrar mensaje final bonito
   formulario.innerHTML = "<p>Gracias, lo tomaré en cuenta 😊</p>";
 });
 
@@ -146,6 +168,7 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
 
