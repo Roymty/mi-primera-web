@@ -199,6 +199,13 @@ h1 {
   cursor: pointer;
 }
 
+.icono {
+  width: 60px;
+  margin-bottom: 18px;
+  opacity: 0.85;
+  animation: aparecer 1s ease;
+}
+
 /* ANIMACIONES */
 @keyframes aparecer {
   from {
@@ -267,6 +274,7 @@ h1 {
     transform: translateX(-80px);
   }
 }
+
 
 
 
