@@ -1,11 +1,10 @@
 :root {
-  --fondo: #fdeff4;
+  --fondo: linear-gradient(135deg, #fdfbfb, #f3f1f1);
   --card: #ffffff;
-  --principal: #f48fb1;
-  --principal-hover: #f06292;
-  --secundario: #e0e0e0;
-  --texto: #444;
-  --acento: #90caf9;
+  --texto: #2e2e2e;
+  --suave: #777;
+  --acento: #c89b7b;
+  --acento-hover: #b38668;
 }
 
 /* RESET */
@@ -17,8 +16,8 @@
 /* BODY */
 body {
   margin: 0;
-  height: 100vh;
-  background: linear-gradient(135deg, #fdeff4, #fce4ec, #f3e5f5);
+  min-height: 100vh;
+  background: var(--fondo);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,13 +31,15 @@ body {
 /* TARJETA */
 .card {
   background: var(--card);
-  padding: 50px 40px;
+  padding: 50px 42px;
   max-width: 420px;
+  width: 100%;
   text-align: center;
-  border-radius: 20px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.12);
-  animation: aparecer 0.8s ease;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  border-radius: 22px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.08),
+    0 1px 0 rgba(255,255,255,0.6) inset;
+  animation: entradaSuave 1s ease forwards;
 }
 
 .card:hover {
@@ -55,8 +56,8 @@ h1 {
 
 /* TEXTO */
 .texto {
-  color: var(--texto);
-  line-height: 1.6;
+  color: var(--suave);
+  line-height: 1.7;
   font-size: 1.05rem;
 }
 
@@ -69,34 +70,40 @@ h1 {
 }
 
 .btn {
-  padding: 12px 30px;
+  padding: 13px 30px;
   border-radius: 30px;
   border: none;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transition: all 0.35s ease;
 }
 
 .si {
-  background: linear-gradient(135deg, var(--principal), var(--principal-hover));
+  background: var(--acento);
   color: white;
+  box-shadow: 0 8px 20px rgba(200,155,123,0.35);
+}
+
+.si:hover {
+  background: var(--acento-hover);
+  transform: translateY(-2px);
 }
 
 .no {
-  background: var(--secundario);
-  color: #555;
+  background: transparent;
+  border: 1px solid #ccc;
+  color: #666;
 }
 
-.btn:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
+.no:hover {
+  background: #f7f7f7;
 }
 
 /* MENSAJES */
 .mensaje {
   margin-top: 30px;
   font-style: italic;
+  color: var(--suave);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -121,14 +128,16 @@ h1 {
 .formulario textarea {
   width: 100%;
   padding: 11px;
-  margin-top: 10px;
+  margin-top: 12px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   font-size: 0.9rem;
 }
 
-.formulario textarea {
-  resize: none;
+.formulario input:focus,
+.formulario textarea:focus {
+  outline: none;
+  border-color: var(--acento);
 }
 
 .formulario button {
@@ -217,6 +226,17 @@ h1 {
   max-width: 420px;
 }
 
+.icono {
+  width: 38px;
+  opacity: 0.35;
+  margin-bottom: 12px;
+  animation: latido 3s infinite ease-in-out;
+}
+
+@keyframes latido {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
 
 /* ANIMACIONES */
 @keyframes aparecer {
@@ -284,6 +304,17 @@ h1 {
   to {
     opacity: 0;
     transform: translateX(-80px);
+  }
+}
+
+@keyframes entradaSuave {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
