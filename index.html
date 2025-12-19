@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitación</title>
   <!-- Cada vez que cambies estilos cambia a ?v=3 o el numero que siga -->
-  <link rel="stylesheet" href="estilos.css?v=2">
+  <link rel="stylesheet" href="estilos.css?v=3">
 </head>
 <body>
 
@@ -25,7 +25,6 @@
   </p>
 </div>
 
-
       <div class="acciones">
         <button class="btn si" id="btnSi">Sí</button>
         <button class="btn no" id="btnNo">No</button>
@@ -33,19 +32,22 @@
 
       <p id="mensaje" class="mensaje"></p>
       
-      <p id="mensajeFinal" class="mensaje oculto">
+      <!-- <p id="mensajeFinal" class="mensaje oculto">
            Perfecto, ahora cuéntame un poco más 😊
-      </p>
+      </p> -->
       
       <p id="mensajeNo" class="mensaje oculto">
            Está bien, gracias por tu sinceridad 😊
       </p>
 
-
       <!-- FORMULARIO (solo aparece si dice SÍ) -->
       <form id="formulario" class="formulario oculto">
         <h3>Un pequeño detalle 💙</h3>
 
+        <p id="mensajeFinal" class="mensaje oculto">
+           Perfecto, ahora cuéntame un poco más 😊
+      </p>
+        
         <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required>
         <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required>
         <textarea id="comentario" placeholder="Algo que quieras agregar (opcional)"></textarea>
@@ -69,6 +71,7 @@
   <script type="module" src="script.js"></script>
 </body>
 </html>
+
 
 
 
