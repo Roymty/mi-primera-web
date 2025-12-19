@@ -233,16 +233,7 @@ h1 {
   animation: latido 3s infinite ease-in-out;
 }
 
-.intro-form {
-  margin: 10px 0 25px;
-  font-size: 0.95rem;
-  color: #666;
-  font-style: italic;
-}
 
-.intro-form {
-  animation: aparecer 0.6s ease;
-}
 
 @keyframes latido {
   0%, 100% { transform: scale(1); }
@@ -328,6 +319,7 @@ h1 {
     transform: translateY(0) scale(1);
   }
 }
+
 
 
 
