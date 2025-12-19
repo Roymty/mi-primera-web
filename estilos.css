@@ -208,11 +208,15 @@ h1 {
 
 .container {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .card {
   width: 100%;
+  max-width: 420px;
 }
+
 
 /* ANIMACIONES */
 @keyframes aparecer {
@@ -282,6 +286,7 @@ h1 {
     transform: translateX(-80px);
   }
 }
+
 
 
 
