@@ -6,8 +6,7 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* ================= FIREBASE ================= */
-
+/* FIREBASE */
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -20,8 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ================= ELEMENTOS ================= */
-
+/* ELEMENTOS */
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
@@ -29,12 +27,12 @@ const mensajeFinal = document.getElementById("mensajeFinal");
 const mensajeNo = document.getElementById("mensajeNo");
 const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
+const card = document.querySelector(".card");
 
-/* ================= FUNCIONES ================= */
-
+/* GUARDAR RESPUESTA */
 async function guardarRespuesta(respuesta) {
   await addDoc(collection(db, "respuestas"), {
-    respuesta: respuesta,
+    respuesta,
     fecha: new Date()
   });
 
@@ -46,54 +44,52 @@ async function guardarRespuesta(respuesta) {
 
   setTimeout(() => {
     mensaje.style.opacity = 0;
-  }, 1200);
+  }, 1000);
 }
 
-/* ================= BOTÓN SÍ ================= */
-
+/* BOTÓN SÍ */
 btnSi.addEventListener("click", async () => {
   await guardarRespuesta("Sí");
 
+  card.classList.add("compacta");
   invitacion.style.display = "none";
 
   setTimeout(() => {
-    mensajeFinal.classList.remove("oculto");
     formulario.classList.remove("oculto");
-  }, 400);
+    mensajeFinal.style.opacity = 1;
+  }, 300);
 });
 
-/* ================= BOTÓN NO ================= */
-
+/* BOTÓN NO */
 btnNo.addEventListener("click", async () => {
   await guardarRespuesta("No");
 
+  card.classList.add("compacta");
   invitacion.style.display = "none";
 
   setTimeout(() => {
     mensajeNo.classList.remove("oculto");
-  }, 400);
+    mensajeNo.style.opacity = 1;
+  }, 300);
 });
 
-/* ================= FORMULARIO ================= */
-
+/* FORMULARIO */
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   await addDoc(collection(db, "detalles"), {
-    comida: document.getElementById("comida").value,
-    lugar: document.getElementById("lugar").value,
-    comentario: document.getElementById("comentario").value,
+    comida: comida.value,
+    lugar: lugar.value,
+    comentario: comentario.value,
     fecha: new Date()
   });
 
-  formulario.reset();
   formulario.style.display = "none";
-
   mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
+  mensajeFinal.style.opacity = 1;
 });
 
-/* ================= ADMIN ================= */
-
+/* ADMIN */
 const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
 const verDatos = document.getElementById("verDatos");
@@ -105,37 +101,16 @@ adminToggle.addEventListener("click", () => {
 });
 
 verDatos.addEventListener("click", async () => {
-  if (document.getElementById("adminPass").value !== "1234") {
+  if (adminPass.value !== "1234") {
     resultadoAdmin.textContent = "Acceso denegado";
     return;
   }
 
-  resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><br>";
+  resultadoAdmin.innerHTML = "<strong>Respuestas</strong><br><br>";
 
   const respuestas = await getDocs(collection(db, "respuestas"));
   respuestas.forEach(doc => {
     const d = doc.data();
     resultadoAdmin.innerHTML += `• ${d.respuesta}<br>`;
   });
-
-  resultadoAdmin.innerHTML += "<hr><strong>Detalles:</strong><br><br>";
-
-  const detalles = await getDocs(collection(db, "detalles"));
-  detalles.forEach(doc => {
-    const d = doc.data();
-    resultadoAdmin.innerHTML += `
-      🍽️ ${d.comida}<br>
-      📍 ${d.lugar}<br>
-      💬 ${d.comentario || "—"}<br><br>
-    `;
-  });
 });
-
-
-
-
-
-
-
-
-
