@@ -246,6 +246,28 @@ h1 {
   }
 }
 
+.salir-si {
+  animation: salirDerecha 0.5s ease forwards;
+}
+
+.salir-no {
+  animation: salirIzquierda 0.5s ease forwards;
+}
+
+@keyframes salirDerecha {
+  to {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+}
+
+@keyframes salirIzquierda {
+  to {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+}
+
 
 
 
