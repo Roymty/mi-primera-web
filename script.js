@@ -3,10 +3,12 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs
+  getDocs,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 CONFIGURACIÓN FIREBASE (LA TUYA) */
+/* 🔥 CONFIGURACIÓN FIREBASE (TUYA) */
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -23,79 +25,42 @@ const db = getFirestore(app);
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
-const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
-const mensajeFinal = document.getElementById("mensajeFinal");
-const mensajeNo = document.getElementById("mensajeNo");
+const formulario = document.getElementById("formulario");
 
-/* FUNCIÓN GUARDAR RESPUESTA */
-async function guardarRespuesta(respuesta) {
-  await addDoc(collection(db, "respuestas"), {
-    respuesta,
-    fecha: new Date()
-  });
+/* ADMIN */
+const adminToggle = document.getElementById("adminToggle");
+const adminPanel = document.getElementById("adminPanel");
+const verDatos = document.getElementById("verDatos");
+const resultadoAdmin = document.getElementById("resultadoAdmin");
 
-  // ocultar botones
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
-
-  // ocultar invitación
-  invitacion.classList.add("desaparecer");
-
-  // mostrar mensaje gracias
-  mensaje.textContent = "Gracias por responder.";
-  mensaje.style.opacity = 1;
-
-  // desaparecer mensaje gracias
-  setTimeout(() => {
-    mensaje.classList.add("desaparecer");
-  }, 800);
-
-  // mostrar siguiente contenido
-  setTimeout(() => {
-    mensaje.style.display = "none";
-
-    if (respuesta === "Sí") {
-      mensajeFinal.classList.remove("oculto");
-      mensajeFinal.style.opacity = 1;
-
-      // mostrar formulario
-      formulario.classList.remove("oculto");
-    }
-
-    if (respuesta === "No") {
-      mensajeNo.classList.remove("oculto");
-      mensajeNo.style.opacity = 1;
-    }
-  }, 1200);
-}
-
+/* ESTADO */
 let respuestaActual = null;
-/* BOTONES */
+
+/* BOTÓN SÍ */
 btnSi.addEventListener("click", () => {
   respuestaActual = "Sí";
 
-  document.getElementById("invitacion")
-    .classList.add("desaparecer");
+  invitacion.classList.add("desaparecer");
+  btnSi.style.display = "none";
+  btnNo.style.display = "none";
 
   mensaje.textContent = "Perfecto, ahora cuéntame un poco más 😊";
   mensaje.style.opacity = 1;
-
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
 
   setTimeout(() => {
     formulario.classList.remove("oculto");
   }, 300);
 });
 
+/* BOTÓN NO */
 btnNo.addEventListener("click", async () => {
   await addDoc(collection(db, "respuestas"), {
     respuesta: "No",
     fecha: new Date()
   });
 
-  document.getElementById("invitacion").classList.add("desaparecer");
+  invitacion.classList.add("desaparecer");
   btnSi.style.display = "none";
   btnNo.style.display = "none";
 
@@ -103,8 +68,7 @@ btnNo.addEventListener("click", async () => {
   mensaje.style.opacity = 1;
 });
 
-
-/* FORMULARIO */
+/* FORMULARIO (GUARDA TODO JUNTO) */
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -117,19 +81,16 @@ formulario.addEventListener("submit", async (e) => {
   });
 
   formulario.innerHTML = "<p>Gracias, lo tomaré en cuenta 😊</p>";
+  mensaje.style.display = "none";
 });
 
-/* ADMIN */
-const adminToggle = document.getElementById("adminToggle");
-const adminPanel = document.getElementById("adminPanel");
-const verDatos = document.getElementById("verDatos");
-const resultadoAdmin = document.getElementById("resultadoAdmin");
-
+/* ADMIN TOGGLE */
 adminToggle.addEventListener("click", () => {
   adminPanel.style.display =
     adminPanel.style.display === "block" ? "none" : "block";
 });
 
+/* ADMIN VER RESPUESTAS */
 verDatos.addEventListener("click", async () => {
   if (document.getElementById("adminPass").value !== "1234") {
     resultadoAdmin.textContent = "Acceso denegado";
@@ -138,36 +99,36 @@ verDatos.addEventListener("click", async () => {
 
   resultadoAdmin.innerHTML = "<h4>Respuestas</h4>";
 
-  // SI / NO
-  const respuestasSnap = await getDocs(collection(db, "respuestas"));
+  const q = query(
+    collection(db, "respuestas"),
+    orderBy("fecha", "desc")
+  );
 
-  respuestasSnap.forEach(doc => {
-    const r = doc.data();
-    resultadoAdmin.innerHTML += `
-      <p><strong>Respuesta:</strong> ${r.respuesta}</p>
-    `;
-  });
+  const datos = await getDocs(q);
 
-  resultadoAdmin.innerHTML += "<hr><h4>Detalles</h4>";
-
-  // DETALLES
-  const detallesSnap = await getDocs(collection(db, "detalles"));
-
-  if (detallesSnap.empty) {
-    resultadoAdmin.innerHTML += "<p>No hay detalles adicionales</p>";
-  }
-
-  detallesSnap.forEach(doc => {
+  datos.forEach(doc => {
     const d = doc.data();
+    const fecha = d.fecha?.toDate
+      ? d.fecha.toDate().toLocaleString()
+      : "—";
+
     resultadoAdmin.innerHTML += `
-      <p>
-        🍽️ ${d.comida}<br>
-        📍 ${d.lugar}<br>
-        💬 ${d.comentario || "Sin comentario"}
-      </p>
+      <hr>
+      <p><strong>Fecha:</strong> ${fecha}</p>
+      <p><strong>Respuesta:</strong> ${d.respuesta}</p>
+      ${
+        d.respuesta === "Sí"
+          ? `
+            <p>🍽 ${d.comida}</p>
+            <p>📍 ${d.lugar}</p>
+            <p>💬 ${d.comentario || "-"}</p>
+          `
+          : ""
+      }
     `;
   });
 });
+
 
 
 
