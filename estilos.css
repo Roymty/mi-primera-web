@@ -222,6 +222,30 @@ h1 {
   }
 }
 
+@media (max-width: 480px) {
+  .card {
+    padding: 35px 25px;
+    border-radius: 16px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  .texto {
+    font-size: 1rem;
+  }
+
+  .acciones {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
 
 
 
