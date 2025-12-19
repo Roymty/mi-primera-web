@@ -6,7 +6,7 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 FIREBASE CONFIG */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -27,7 +27,6 @@ const mensajeFinal = document.getElementById("mensajeFinal");
 const mensajeNo = document.getElementById("mensajeNo");
 const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
-const card = document.querySelector(".card");
 
 /* GUARDAR RESPUESTA */
 async function guardarRespuesta(respuesta) {
@@ -39,16 +38,12 @@ async function guardarRespuesta(respuesta) {
   mensaje.textContent = "Gracias por responder 😊";
   mensaje.style.opacity = 1;
 
-  setTimeout(() => {
-    mensaje.classList.add("desaparecer");
-  }, 1200);
-
-  setTimeout(() => {
-    mensaje.style.display = "none";
-  }, 1800);
-
   btnSi.style.display = "none";
   btnNo.style.display = "none";
+
+  setTimeout(() => {
+    mensaje.style.opacity = 0;
+  }, 1500);
 }
 
 /* BOTÓN SÍ */
@@ -57,13 +52,10 @@ btnSi.addEventListener("click", async () => {
 
   invitacion.classList.add("desaparecer");
 
-  // 👉 HACE LA TARJETA MÁS PEQUEÑA
-  card.classList.add("compacta");
-
   setTimeout(() => {
     mensajeFinal.classList.remove("oculto");
     formulario.classList.remove("oculto");
-  }, 600);
+  }, 500);
 });
 
 /* BOTÓN NO */
@@ -74,7 +66,7 @@ btnNo.addEventListener("click", async () => {
 
   setTimeout(() => {
     mensajeNo.classList.remove("oculto");
-  }, 600);
+  }, 500);
 });
 
 /* FORMULARIO */
@@ -88,7 +80,7 @@ formulario.addEventListener("submit", async (e) => {
     fecha: new Date()
   });
 
-  mensajeFinal.classList.add("oculto");
+  formulario.reset();
   formulario.innerHTML = "<p>Gracias, lo tomaré en cuenta 😊</p>";
 });
 
@@ -110,15 +102,15 @@ verDatos.addEventListener("click", async () => {
     return;
   }
 
-  resultadoAdmin.innerHTML = "<strong>Respuestas</strong><br><br>";
+  resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><br>";
 
   const respuestas = await getDocs(collection(db, "respuestas"));
   respuestas.forEach(doc => {
     const d = doc.data();
-    resultadoAdmin.innerHTML += `• Respuesta: ${d.respuesta}<br>`;
+    resultadoAdmin.innerHTML += `• ${d.respuesta}<br>`;
   });
 
-  resultadoAdmin.innerHTML += "<hr><strong>Detalles</strong><br><br>";
+  resultadoAdmin.innerHTML += "<hr><strong>Detalles:</strong><br><br>";
 
   const detalles = await getDocs(collection(db, "detalles"));
   detalles.forEach(doc => {
@@ -130,9 +122,6 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
-
-
-
 
 
 
