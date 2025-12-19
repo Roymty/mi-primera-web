@@ -6,7 +6,8 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* FIREBASE CONFIG */
+/* ================= FIREBASE ================= */
+
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -19,7 +20,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ELEMENTOS */
+/* ================= ELEMENTOS ================= */
+
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
@@ -28,10 +30,11 @@ const mensajeNo = document.getElementById("mensajeNo");
 const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
 
-/* GUARDAR RESPUESTA */
+/* ================= FUNCIONES ================= */
+
 async function guardarRespuesta(respuesta) {
   await addDoc(collection(db, "respuestas"), {
-    respuesta,
+    respuesta: respuesta,
     fecha: new Date()
   });
 
@@ -43,33 +46,36 @@ async function guardarRespuesta(respuesta) {
 
   setTimeout(() => {
     mensaje.style.opacity = 0;
-  }, 1500);
+  }, 1200);
 }
 
-/* BOTÓN SÍ */
+/* ================= BOTÓN SÍ ================= */
+
 btnSi.addEventListener("click", async () => {
   await guardarRespuesta("Sí");
 
-  invitacion.classList.add("desaparecer");
+  invitacion.style.display = "none";
 
   setTimeout(() => {
     mensajeFinal.classList.remove("oculto");
     formulario.classList.remove("oculto");
-  }, 500);
+  }, 400);
 });
 
-/* BOTÓN NO */
+/* ================= BOTÓN NO ================= */
+
 btnNo.addEventListener("click", async () => {
   await guardarRespuesta("No");
 
-  invitacion.classList.add("desaparecer");
+  invitacion.style.display = "none";
 
   setTimeout(() => {
     mensajeNo.classList.remove("oculto");
-  }, 500);
+  }, 400);
 });
 
-/* FORMULARIO */
+/* ================= FORMULARIO ================= */
+
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -81,7 +87,9 @@ formulario.addEventListener("submit", async (e) => {
   });
 
   formulario.reset();
-  formulario.innerHTML = "<p>Gracias, lo tomaré en cuenta 😊</p>";
+  formulario.style.display = "none";
+
+  mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
 });
 
 /* ================= ADMIN ================= */
@@ -122,6 +130,8 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
+
 
 
 
