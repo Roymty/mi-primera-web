@@ -45,7 +45,7 @@ btnSi.addEventListener("click", () => {
   btnSi.style.display = "none";
   btnNo.style.display = "none";
 
-  mensaje.textContent = "Perfecto, ahora cuéntame un poco más 😊";
+  mensaje.textContent = "¡Excelente! ¿Me cuentas un poco más? 😊";
   mensaje.style.opacity = 1;
 
   setTimeout(() => {
@@ -128,6 +128,7 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
 
