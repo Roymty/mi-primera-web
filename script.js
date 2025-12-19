@@ -3,12 +3,10 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs,
-  query,
-  orderBy
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 CONFIGURACIÓN FIREBASE (TUYA) */
+/* 🔥 FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -25,118 +23,114 @@ const db = getFirestore(app);
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
-const invitacion = document.getElementById("invitacion");
+const mensajeFinal = document.getElementById("mensajeFinal");
+const mensajeNo = document.getElementById("mensajeNo");
 const formulario = document.getElementById("formulario");
+const invitacion = document.getElementById("invitacion");
+const card = document.querySelector(".card");
 
-/* ADMIN */
-const adminToggle = document.getElementById("adminToggle");
-const adminPanel = document.getElementById("adminPanel");
-const verDatos = document.getElementById("verDatos");
-const resultadoAdmin = document.getElementById("resultadoAdmin");
-
-/* ESTADO */
-let respuestaActual = null;
-
-/* BOTÓN SÍ */
-btnSi.addEventListener("click", () => {
-  respuestaActual = "Sí";
-
-  invitacion.classList.add("salir-si");
-  btnSi.classList.add("salir-si");
-  btnNo.classList.add("salir-si");
-
-  mensaje.textContent = "Perfecto, ahora cuéntame un poco más 😊";
-  mensaje.style.opacity = 1;
-
-  setTimeout(() => {
-    btnSi.style.display = "none";
-    btnNo.style.display = "none";
-    formulario.classList.remove("oculto");
-  }, 300);
-});
-
-
-/* BOTÓN NO */
-btnNo.addEventListener("click", async () => {
+/* GUARDAR RESPUESTA */
+async function guardarRespuesta(respuesta) {
   await addDoc(collection(db, "respuestas"), {
-    respuesta: "No",
+    respuesta,
     fecha: new Date()
   });
 
-  invitacion.classList.add("salir-no");
-  btnSi.classList.add("salir-no");
-  btnNo.classList.add("salir-no");
+  mensaje.textContent = "Gracias por responder 😊";
+  mensaje.style.opacity = 1;
 
   setTimeout(() => {
-    btnSi.style.display = "none";
-    btnNo.style.display = "none";
-  }, 300);
+    mensaje.classList.add("desaparecer");
+  }, 1200);
 
-  mensaje.textContent = "Está bien, gracias por tu sinceridad 😊";
-  mensaje.style.opacity = 1;
+  setTimeout(() => {
+    mensaje.style.display = "none";
+  }, 1800);
+
+  btnSi.style.display = "none";
+  btnNo.style.display = "none";
+}
+
+/* BOTÓN SÍ */
+btnSi.addEventListener("click", async () => {
+  await guardarRespuesta("Sí");
+
+  invitacion.classList.add("desaparecer");
+
+  // 👉 HACE LA TARJETA MÁS PEQUEÑA
+  card.classList.add("compacta");
+
+  setTimeout(() => {
+    mensajeFinal.classList.remove("oculto");
+    formulario.classList.remove("oculto");
+  }, 600);
 });
 
+/* BOTÓN NO */
+btnNo.addEventListener("click", async () => {
+  await guardarRespuesta("No");
 
-/* FORMULARIO (GUARDA TODO JUNTO) */
+  invitacion.classList.add("desaparecer");
+
+  setTimeout(() => {
+    mensajeNo.classList.remove("oculto");
+  }, 600);
+});
+
+/* FORMULARIO */
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  await addDoc(collection(db, "respuestas"), {
-    respuesta: respuestaActual,
+  await addDoc(collection(db, "detalles"), {
     comida: document.getElementById("comida").value,
     lugar: document.getElementById("lugar").value,
     comentario: document.getElementById("comentario").value,
     fecha: new Date()
   });
 
+  mensajeFinal.classList.add("oculto");
   formulario.innerHTML = "<p>Gracias, lo tomaré en cuenta 😊</p>";
-  mensaje.style.display = "none";
 });
 
-/* ADMIN TOGGLE */
+/* ================= ADMIN ================= */
+
+const adminToggle = document.getElementById("adminToggle");
+const adminPanel = document.getElementById("adminPanel");
+const verDatos = document.getElementById("verDatos");
+const resultadoAdmin = document.getElementById("resultadoAdmin");
+
 adminToggle.addEventListener("click", () => {
   adminPanel.style.display =
     adminPanel.style.display === "block" ? "none" : "block";
 });
 
-/* ADMIN VER RESPUESTAS */
 verDatos.addEventListener("click", async () => {
   if (document.getElementById("adminPass").value !== "1234") {
     resultadoAdmin.textContent = "Acceso denegado";
     return;
   }
 
-  resultadoAdmin.innerHTML = "<h4>Respuestas</h4>";
+  resultadoAdmin.innerHTML = "<strong>Respuestas</strong><br><br>";
 
-  const q = query(
-    collection(db, "respuestas"),
-    orderBy("fecha", "desc")
-  );
-
-  const datos = await getDocs(q);
-
-  datos.forEach(doc => {
+  const respuestas = await getDocs(collection(db, "respuestas"));
+  respuestas.forEach(doc => {
     const d = doc.data();
-    const fecha = d.fecha?.toDate
-      ? d.fecha.toDate().toLocaleString()
-      : "—";
+    resultadoAdmin.innerHTML += `• Respuesta: ${d.respuesta}<br>`;
+  });
 
+  resultadoAdmin.innerHTML += "<hr><strong>Detalles</strong><br><br>";
+
+  const detalles = await getDocs(collection(db, "detalles"));
+  detalles.forEach(doc => {
+    const d = doc.data();
     resultadoAdmin.innerHTML += `
-      <hr>
-      <p><strong>Fecha:</strong> ${fecha}</p>
-      <p><strong>Respuesta:</strong> ${d.respuesta}</p>
-      ${
-        d.respuesta === "Sí"
-          ? `
-            <p>🍽 ${d.comida}</p>
-            <p>📍 ${d.lugar}</p>
-            <p>💬 ${d.comentario || "-"}</p>
-          `
-          : ""
-      }
+      🍽️ ${d.comida}<br>
+      📍 ${d.lugar}<br>
+      💬 ${d.comentario || "—"}<br><br>
     `;
   });
 });
+
 
 
 
