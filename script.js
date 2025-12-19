@@ -31,14 +31,9 @@ const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
 const card = document.querySelector(".card");
 
-/* ================= FUNCIONES ================= */
+/* ================= MENSAJE VISUAL ================= */
 
-async function guardarRespuesta(respuesta) {
-  await addDoc(collection(db, "respuestas"), {
-    respuesta,
-    fecha: new Date()
-  });
-
+function mostrarGracias() {
   mensaje.textContent = "Gracias por responder 😊";
   mensaje.style.opacity = 1;
 
@@ -52,8 +47,8 @@ async function guardarRespuesta(respuesta) {
 
 /* ================= BOTÓN SÍ ================= */
 
-btnSi.addEventListener("click", async () => {
-  await guardarRespuesta("Sí");
+btnSi.addEventListener("click", () => {
+  mostrarGracias();
 
   card.classList.add("compacta");
   invitacion.style.display = "none";
@@ -67,7 +62,12 @@ btnSi.addEventListener("click", async () => {
 /* ================= BOTÓN NO ================= */
 
 btnNo.addEventListener("click", async () => {
-  await guardarRespuesta("No");
+  mostrarGracias();
+
+  await addDoc(collection(db, "detalles"), {
+    respuesta: "No",
+    fecha: new Date()
+  });
 
   card.classList.add("compacta");
   invitacion.style.display = "none";
@@ -78,19 +78,19 @@ btnNo.addEventListener("click", async () => {
   }, 300);
 });
 
-/* ================= FORMULARIO ================= */
+/* ================= FORMULARIO (SÍ + DETALLES) ================= */
 
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   await addDoc(collection(db, "detalles"), {
+    respuesta: "Sí",
     comida: comida.value,
     lugar: lugar.value,
     comentario: comentario.value,
     fecha: new Date()
   });
 
-  /* 👇 OCULTAMOS SOLO LOS CAMPOS, NO EL MENSAJE */
   formulario.querySelectorAll("input, textarea, button").forEach(el => {
     el.style.display = "none";
   });
@@ -120,21 +120,17 @@ verDatos.addEventListener("click", async () => {
 
   resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><br>";
 
-  const respuestas = await getDocs(collection(db, "respuestas"));
-  respuestas.forEach(doc => {
-    const d = doc.data();
-    resultadoAdmin.innerHTML += `🗳️ ${d.respuesta}<br>`;
-  });
+  const datos = await getDocs(collection(db, "detalles"));
 
-  resultadoAdmin.innerHTML += "<hr><strong>Detalles:</strong><br><br>";
-
-  const detalles = await getDocs(collection(db, "detalles"));
-  detalles.forEach(doc => {
+  datos.forEach(doc => {
     const d = doc.data();
     resultadoAdmin.innerHTML += `
-      🍽️ ${d.comida}<br>
-      📍 ${d.lugar}<br>
-      💬 ${d.comentario || "—"}<br><br>
+      🗳️ ${d.respuesta}<br>
+      ${d.comida ? `🍽️ ${d.comida}<br>` : ""}
+      ${d.lugar ? `📍 ${d.lugar}<br>` : ""}
+      ${d.comentario ? `💬 ${d.comentario}<br>` : ""}
+      📅 ${d.fecha?.toDate?.().toLocaleString() || ""}
+      <hr>
     `;
   });
 });
