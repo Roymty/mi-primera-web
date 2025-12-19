@@ -41,17 +41,20 @@ let respuestaActual = null;
 btnSi.addEventListener("click", () => {
   respuestaActual = "Sí";
 
-  invitacion.classList.add("desaparecer");
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
+  invitacion.classList.add("salir-si");
+  btnSi.classList.add("salir-si");
+  btnNo.classList.add("salir-si");
 
-  mensaje.textContent = "¡Excelente! ¿Me cuentas un poco más? 😊";
+  mensaje.textContent = "Perfecto, ahora cuéntame un poco más 😊";
   mensaje.style.opacity = 1;
 
   setTimeout(() => {
+    btnSi.style.display = "none";
+    btnNo.style.display = "none";
     formulario.classList.remove("oculto");
   }, 300);
 });
+
 
 /* BOTÓN NO */
 btnNo.addEventListener("click", async () => {
@@ -60,13 +63,19 @@ btnNo.addEventListener("click", async () => {
     fecha: new Date()
   });
 
-  invitacion.classList.add("desaparecer");
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
+  invitacion.classList.add("salir-no");
+  btnSi.classList.add("salir-no");
+  btnNo.classList.add("salir-no");
+
+  setTimeout(() => {
+    btnSi.style.display = "none";
+    btnNo.style.display = "none";
+  }, 300);
 
   mensaje.textContent = "Está bien, gracias por tu sinceridad 😊";
   mensaje.style.opacity = 1;
 });
+
 
 /* FORMULARIO (GUARDA TODO JUNTO) */
 formulario.addEventListener("submit", async (e) => {
@@ -128,6 +137,7 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
 
 
