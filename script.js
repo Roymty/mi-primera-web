@@ -3,14 +3,11 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs,
-  deleteDoc,
-  doc
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ================= FIREBASE ================= */
 
-// Configuración de Firebase, con los detalles de tu proyecto
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -20,12 +17,11 @@ const firebaseConfig = {
   appId: "1:743465964686:web:f9dca07e62862fe47ee5df"
 };
 
-const app = initializeApp(firebaseConfig); // Inicialización de la app en Firebase
-const db = getFirestore(app); // Referencia a Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 /* ================= ELEMENTOS ================= */
 
-// Acceso a elementos del DOM para interactuar con ellos
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
@@ -34,25 +30,9 @@ const mensajeNo = document.getElementById("mensajeNo");
 const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
 const card = document.querySelector(".card");
-const adminPass = document.getElementById("adminPass");  // Contraseña de admin
-const deletePass = document.getElementById("deletePass");  // Contraseña para borrar
-const resultadoAdmin = document.getElementById("resultadoAdmin");
-const adminToggle = document.getElementById("adminToggle");
-const adminPanel = document.getElementById("adminPanel");
-const verDatos = document.getElementById("verDatos");
-const borrarDatos = document.getElementById("borrarDatos");
-
-/* ================= CONTRASEÑAS ================= */
-
-// Contraseña para ver respuestas (admin)
-const ADMIN_PASSWORD = "1234"; // Cambia la contraseña de admin aquí
-
-// Contraseña para borrar datos
-const DELETE_PASSWORD = "delete2025"; // Cambia la contraseña para borrar aquí
 
 /* ================= MENSAJE VISUAL ================= */
 
-// Función para mostrar el mensaje de agradecimiento
 function mostrarGracias() {
   mensaje.textContent = "Gracias por responder 😊";
   mensaje.style.opacity = 1;
@@ -65,7 +45,8 @@ function mostrarGracias() {
   }, 1000);
 }
 
-// Función para manejar el botón "Sí"
+/* ================= BOTÓN SÍ ================= */
+
 btnSi.addEventListener("click", () => {
   mostrarGracias();
 
@@ -78,7 +59,8 @@ btnSi.addEventListener("click", () => {
   }, 300);
 });
 
-// Función para manejar el botón "No"
+/* ================= BOTÓN NO ================= */
+
 btnNo.addEventListener("click", async () => {
   mostrarGracias();
 
@@ -96,7 +78,8 @@ btnNo.addEventListener("click", async () => {
   }, 300);
 });
 
-// Enviar detalles cuando el formulario se envía
+/* ================= FORMULARIO (SÍ + DETALLES) ================= */
+
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -118,15 +101,19 @@ formulario.addEventListener("submit", async (e) => {
 
 /* ================= ADMIN ================= */
 
-// Mostrar y ocultar el panel de admin
+const adminToggle = document.getElementById("adminToggle");
+const adminPanel = document.getElementById("adminPanel");
+const verDatos = document.getElementById("verDatos");
+const resultadoAdmin = document.getElementById("resultadoAdmin");
+const adminPass = document.getElementById("adminPass");
+
 adminToggle.addEventListener("click", () => {
   adminPanel.style.display =
     adminPanel.style.display === "block" ? "none" : "block";
 });
 
-// Ver respuestas de usuarios
 verDatos.addEventListener("click", async () => {
-  if (adminPass.value !== ADMIN_PASSWORD) { // Validación con la contraseña de admin
+  if (adminPass.value !== "1234") {
     resultadoAdmin.textContent = "Acceso denegado";
     return;
   }
@@ -146,27 +133,4 @@ verDatos.addEventListener("click", async () => {
       <hr>
     `;
   });
-});
-
-// Borrar los datos de Firestore
-borrarDatos.addEventListener("click", async () => {
-  if (deletePass.value !== DELETE_PASSWORD) { // Validación con la contraseña de borrado
-    resultadoAdmin.textContent = "Acceso denegado";
-    return;
-  }
-
-  const confirmacion = confirm("¿Estás seguro de que deseas borrar todos los datos?");
-  if (confirmacion) {
-    try {
-      const querySnapshot = await getDocs(collection(db, "detalles"));
-      querySnapshot.forEach(async (docSnapshot) => {
-        await deleteDoc(doc(db, "detalles", docSnapshot.id)); // Eliminar documentos
-      });
-
-      resultadoAdmin.innerHTML = "Todos los datos han sido borrados.";
-    } catch (error) {
-      console.error("Error al borrar los documentos: ", error);
-      resultadoAdmin.innerHTML = "Hubo un error al borrar los datos.";
-    }
-  }
 });
