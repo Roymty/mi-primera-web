@@ -3,9 +3,12 @@ import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.c
 
 /* FIREBASE */
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
+  apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
+  authDomain: "invitacion-web-84d4f.firebaseapp.com",
+  projectId: "invitacion-web-84d4f",
+  storageBucket: "invitacion-web-84d4f.firebasestorage.app",
+  messagingSenderId: "743465964686",
+  appId: "1:743465964686:web:f9dca07e62862fe47ee5df"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -86,3 +89,4 @@ configToggle.onclick = () =>
   configPanel.style.display = configPanel.style.display === "block" ? "none" : "block";
 
 cargarNombres();
+
