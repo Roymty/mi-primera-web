@@ -161,21 +161,6 @@ h1 {
   margin-top: 10px;
 }
 
-/* CONFIG NOMBRES */
-.config {
-  right: 50px;
-}
-
-#configToggle {
-  cursor: pointer;
-  font-size: 16px;
-  opacity: 0.3;
-}
-
-#configToggle:hover {
-  opacity: 1;
-}
-
 /* ANIMACIONES */
 @keyframes aparecer {
   from {
@@ -192,4 +177,3 @@ h1 {
   0%,100% { transform: scale(1); }
   50% { transform: scale(1.08); }
 }
-
