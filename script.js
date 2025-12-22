@@ -99,46 +99,6 @@ formulario.addEventListener("submit", async (e) => {
   mensajeFinal.style.opacity = 1;
 });
 
-/* ===== CONFIGURACIÓN DE NOMBRES ===== */
-
-const txtInvitador = document.getElementById("txtInvitador");
-const txtInvitada = document.getElementById("txtInvitada");
-
-const nombreInvitadorInput = document.getElementById("nombreInvitador");
-const nombreInvitadaInput = document.getElementById("nombreInvitada");
-const guardarNombres = document.getElementById("guardarNombres");
-
-const configToggle = document.getElementById("configToggle");
-const configPanel = document.getElementById("configPanel");
-
-/* Mostrar / ocultar panel */
-configToggle.addEventListener("click", () => {
-  configPanel.style.display =
-    configPanel.style.display === "block" ? "none" : "block";
-});
-
-/* Guardar nombres */
-guardarNombres.addEventListener("click", () => {
-  localStorage.setItem("invitador", nombreInvitadorInput.value);
-  localStorage.setItem("invitada", nombreInvitadaInput.value);
-  cargarNombres();
-});
-
-/* Cargar nombres */
-function cargarNombres() {
-  const invitador = localStorage.getItem("invitador") || "";
-  const invitada = localStorage.getItem("invitada") || "";
-
-  txtInvitador.textContent = invitador;
-  txtInvitada.textContent = invitada;
-
-  nombreInvitadorInput.value = invitador;
-  nombreInvitadaInput.value = invitada;
-}
-
-/* Ejecutar al cargar */
-cargarNombres();
-
 /* ================= ADMIN ================= */
 
 const adminToggle = document.getElementById("adminToggle");
@@ -174,4 +134,5 @@ verDatos.addEventListener("click", async () => {
     `;
   });
 });
+
 
