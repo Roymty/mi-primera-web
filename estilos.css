@@ -6,11 +6,13 @@
   --acento-hover: #b38668;
 }
 
+/* RESET */
 * {
   box-sizing: border-box;
   font-family: 'Georgia', serif;
 }
 
+/* BODY */
 body {
   margin: 0;
   min-height: 100vh;
@@ -20,6 +22,7 @@ body {
   align-items: center;
 }
 
+/* CONTENEDOR */
 .container {
   width: 100%;
   padding: 20px;
@@ -27,6 +30,7 @@ body {
   justify-content: center;
 }
 
+/* TARJETA */
 .card {
   background: white;
   padding: 40px 35px;
@@ -38,21 +42,25 @@ body {
   transition: padding 0.4s ease;
 }
 
+/* TARJETA COMPACTA */
 .card.compacta {
   padding-top: 25px;
   padding-bottom: 28px;
 }
 
+/* TITULO */
 h1 {
   font-weight: normal;
   color: var(--texto);
 }
 
+/* TEXTO */
 .texto {
   color: var(--suave);
   line-height: 1.7;
 }
 
+/* ICONO */
 .icono {
   width: 38px;
   opacity: 0.4;
@@ -60,6 +68,7 @@ h1 {
   animation: latido 3s infinite ease-in-out;
 }
 
+/* BOTONES PRINCIPALES */
 .acciones {
   margin-top: 30px;
   display: flex;
@@ -89,6 +98,7 @@ h1 {
   border: 1px solid #ccc;
 }
 
+/* MENSAJES */
 .mensaje {
   margin-top: 25px;
   color: var(--suave);
@@ -100,6 +110,7 @@ h1 {
   opacity: 1;
 }
 
+/* FORMULARIO */
 .formulario {
   margin-top: 25px;
   animation: aparecer 0.5s ease;
@@ -125,9 +136,12 @@ h1 {
   cursor: pointer;
 }
 
+/* OCULTAR */
 .oculto {
   display: none;
 }
+
+/* ================= ADMIN ================= */
 
 .admin {
   position: fixed;
@@ -146,63 +160,54 @@ h1 {
   padding: 12px;
   border-radius: 12px;
   margin-top: 10px;
-}
-/* ===== BOTONES ADMIN ===== */
-
-.admin-btn {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+  text-align: center;
 }
 
-/* ===== BOTONES ADMIN ===== */
+/* ===== BOTONES ADMIN (CORREGIDOS) ===== */
 
 .admin-btn {
-  padding: 6px 10px;
+  padding: 4px 8px;
   margin-top: 6px;
-  border-radius: 8px;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
-  font-size: 0.75rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.7rem;
+  line-height: 1;
+  transition: none; /* sin animación */
 }
 
-/* BOTÓN SOLO ICONO */
+/* VER RESPUESTAS */
+.admin-btn.verde {
+  background-color: #2e7d32;
+  color: white;
+}
+
+.admin-btn.verde:hover {
+  background-color: #2e7d32;
+}
+
+/* BORRAR DATOS (ICONO) */
+.admin-btn.rojo {
+  background-color: #c62828;
+  color: white;
+}
+
+.admin-btn.rojo:hover {
+  background-color: #c62828;
+}
+
+/* SOLO ICONO */
 .admin-btn.icono {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   padding: 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* VER RESPUESTAS - VERDE */
-.admin-btn.verde {
-  background: #4caf50;
-  color: white;
-}
-
-.admin-btn.verde:hover {
-  background: #43a047;
-}
-
-/* BORRAR RESPUESTAS - ROJO */
-.admin-btn.rojo {
-  background: #e53935;
-  color: white;
-}
-
-.admin-btn.rojo:hover {
-  background: #d32f2f;
-}
-
+/* ================= ANIMACIONES ================= */
 
 @keyframes aparecer {
   from {
@@ -216,8 +221,6 @@ h1 {
 }
 
 @keyframes latido {
-  0%,100% { transform: scale(1); }
+  0%, 100% { transform: scale(1); }
   50% { transform: scale(1.08); }
 }
-
-
