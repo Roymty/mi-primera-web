@@ -113,6 +113,10 @@ const borrarDatos = document.getElementById("borrarDatos");
 const resultadoAdmin = document.getElementById("resultadoAdmin");
 const adminPass = document.getElementById("adminPass");
 
+/* 🔐 CONTRASEÑAS */
+const ADMIN_PASS = "1234";
+const BORRAR_PASS = "BORRAR123";
+
 adminToggle.addEventListener("click", () => {
   adminPanel.style.display =
     adminPanel.style.display === "block" ? "none" : "block";
@@ -121,7 +125,7 @@ adminToggle.addEventListener("click", () => {
 /* ===== VER DATOS ===== */
 
 verDatos.addEventListener("click", async () => {
-  if (adminPass.value !== "1234") {
+  if (adminPass.value !== ADMIN_PASS) {
     resultadoAdmin.textContent = "Acceso denegado";
     return;
   }
@@ -135,8 +139,8 @@ verDatos.addEventListener("click", async () => {
     return;
   }
 
-  datos.forEach(doc => {
-    const d = doc.data();
+  datos.forEach(docItem => {
+    const d = docItem.data();
     resultadoAdmin.innerHTML += `
       🗳️ ${d.respuesta}<br>
       ${d.comida ? `🍽️ ${d.comida}<br>` : ""}
@@ -148,16 +152,25 @@ verDatos.addEventListener("click", async () => {
   });
 });
 
-/* ===== BORRAR DATOS ===== */
+/* ===== BORRAR DATOS (CON CONTRASEÑA PROPIA) ===== */
 
 borrarDatos.addEventListener("click", async () => {
-  if (adminPass.value !== "1234") {
+  if (adminPass.value !== ADMIN_PASS) {
     resultadoAdmin.textContent = "Acceso denegado";
     return;
   }
 
+  const passBorrado = prompt(
+    "⚠️ Acción peligrosa\n\nIngresa la contraseña para BORRAR las respuestas:"
+  );
+
+  if (passBorrado !== BORRAR_PASS) {
+    alert("Contraseña incorrecta. No se borró nada.");
+    return;
+  }
+
   const confirmar = confirm(
-    "⚠️ ¿Seguro que deseas borrar TODAS las respuestas?\nEsta acción no se puede deshacer."
+    "🗑️ ¿Seguro que deseas borrar TODAS las respuestas?\nEsta acción no se puede deshacer."
   );
 
   if (!confirmar) return;
