@@ -115,7 +115,7 @@ const adminPass = document.getElementById("adminPass");
 
 /* 🔐 CONTRASEÑAS */
 const ADMIN_PASS = "1234";
-const BORRAR_PASS = "BORRAR123";
+const BORRAR_PASS = "1349164";
 
 adminToggle.addEventListener("click", () => {
   adminPanel.style.display =
@@ -183,3 +183,4 @@ borrarDatos.addEventListener("click", async () => {
 
   resultadoAdmin.innerHTML = "🗑️ Todas las respuestas fueron borradas.";
 });
+
