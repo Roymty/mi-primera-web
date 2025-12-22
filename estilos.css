@@ -6,13 +6,11 @@
   --acento-hover: #b38668;
 }
 
-/* RESET */
 * {
   box-sizing: border-box;
   font-family: 'Georgia', serif;
 }
 
-/* BODY */
 body {
   margin: 0;
   min-height: 100vh;
@@ -22,7 +20,6 @@ body {
   align-items: center;
 }
 
-/* CONTENEDOR */
 .container {
   width: 100%;
   padding: 20px;
@@ -30,7 +27,6 @@ body {
   justify-content: center;
 }
 
-/* TARJETA */
 .card {
   background: white;
   padding: 40px 35px;
@@ -42,25 +38,21 @@ body {
   transition: padding 0.4s ease;
 }
 
-/* 👇 TARJETA COMPACTA */
 .card.compacta {
   padding-top: 25px;
   padding-bottom: 28px;
 }
 
-/* TITULO */
 h1 {
   font-weight: normal;
   color: var(--texto);
 }
 
-/* TEXTO */
 .texto {
   color: var(--suave);
   line-height: 1.7;
 }
 
-/* ICONO */
 .icono {
   width: 38px;
   opacity: 0.4;
@@ -68,7 +60,6 @@ h1 {
   animation: latido 3s infinite ease-in-out;
 }
 
-/* BOTONES */
 .acciones {
   margin-top: 30px;
   display: flex;
@@ -98,7 +89,6 @@ h1 {
   border: 1px solid #ccc;
 }
 
-/* MENSAJES */
 .mensaje {
   margin-top: 25px;
   color: var(--suave);
@@ -110,7 +100,6 @@ h1 {
   opacity: 1;
 }
 
-/* FORMULARIO */
 .formulario {
   margin-top: 25px;
   animation: aparecer 0.5s ease;
@@ -136,12 +125,10 @@ h1 {
   cursor: pointer;
 }
 
-/* OCULTAR */
 .oculto {
   display: none;
 }
 
-/* ADMIN */
 .admin {
   position: fixed;
   bottom: 12px;
@@ -161,7 +148,6 @@ h1 {
   margin-top: 10px;
 }
 
-/* ANIMACIONES */
 @keyframes aparecer {
   from {
     opacity: 0;
