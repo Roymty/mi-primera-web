@@ -1,136 +1,181 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-/* ================= FIREBASE ================= */
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
-  authDomain: "invitacion-web-84d4f.firebaseapp.com",
-  projectId: "invitacion-web-84d4f",
-  storageBucket: "invitacion-web-84d4f.firebasestorage.app",
-  messagingSenderId: "743465964686",
-  appId: "1:743465964686:web:f9dca07e62862fe47ee5df"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-/* ================= ELEMENTOS ================= */
-
-const btnSi = document.getElementById("btnSi");
-const btnNo = document.getElementById("btnNo");
-const mensaje = document.getElementById("mensaje");
-const mensajeFinal = document.getElementById("mensajeFinal");
-const mensajeNo = document.getElementById("mensajeNo");
-const formulario = document.getElementById("formulario");
-const invitacion = document.getElementById("invitacion");
-const card = document.querySelector(".card");
-
-/* ================= MENSAJE VISUAL ================= */
-
-function mostrarGracias() {
-  mensaje.textContent = "Gracias por responder 😊";
-  mensaje.style.opacity = 1;
-
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
-
-  setTimeout(() => {
-    mensaje.style.opacity = 0;
-  }, 1000);
+:root {
+  --fondo: linear-gradient(135deg, #fdfbfb, #f3f1f1);
+  --texto: #2e2e2e;
+  --suave: #777;
+  --acento: #c89b7b;
+  --acento-hover: #b38668;
 }
 
-/* ================= BOTÓN SÍ ================= */
+/* RESET */
+* {
+  box-sizing: border-box;
+  font-family: 'Georgia', serif;
+}
 
-btnSi.addEventListener("click", () => {
-  mostrarGracias();
+/* BODY */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--fondo);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  card.classList.add("compacta");
-  invitacion.style.display = "none";
+/* CONTENEDOR */
+.container {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
 
-  setTimeout(() => {
-    formulario.classList.remove("oculto");
-    mensajeFinal.style.opacity = 1;
-  }, 300);
-});
+/* TARJETA */
+.card {
+  background: white;
+  padding: 40px 35px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  border-radius: 18px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+  transition: padding 0.4s ease;
+}
 
-/* ================= BOTÓN NO ================= */
+/* 👇 TARJETA COMPACTA */
+.card.compacta {
+  padding-top: 25px;
+  padding-bottom: 28px;
+}
 
-btnNo.addEventListener("click", async () => {
-  mostrarGracias();
+/* TITULO */
+h1 {
+  font-weight: normal;
+  color: var(--texto);
+}
 
-  await addDoc(collection(db, "detalles"), {
-    respuesta: "No",
-    fecha: new Date()
-  });
+/* TEXTO */
+.texto {
+  color: var(--suave);
+  line-height: 1.7;
+}
 
-  card.classList.add("compacta");
-  invitacion.style.display = "none";
+/* ICONO */
+.icono {
+  width: 38px;
+  opacity: 0.4;
+  margin-bottom: 12px;
+  animation: latido 3s infinite ease-in-out;
+}
 
-  setTimeout(() => {
-    mensajeNo.classList.remove("oculto");
-    mensajeNo.style.opacity = 1;
-  }, 300);
-});
+/* BOTONES */
+.acciones {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
 
-/* ================= FORMULARIO (SÍ + DETALLES) ================= */
+.btn {
+  padding: 13px 30px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
 
-formulario.addEventListener("submit", async (e) => {
-  e.preventDefault();
+.si {
+  background: var(--acento);
+  color: white;
+}
 
-  await addDoc(collection(db, "detalles"), {
-    respuesta: "Sí",
-    comida: comida.value,
-    lugar: lugar.value,
-    comentario: comentario.value,
-    fecha: new Date()
-  });
+.si:hover {
+  background: var(--acento-hover);
+}
 
-  formulario.querySelectorAll("input, textarea, button").forEach(el => {
-    el.style.display = "none";
-  });
+.no {
+  background: transparent;
+  border: 1px solid #ccc;
+}
 
-  mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
-  mensajeFinal.style.opacity = 1;
-});
+/* MENSAJES */
+.mensaje {
+  margin-top: 25px;
+  color: var(--suave);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
 
-/* ================= ADMIN ================= */
+.fade-in {
+  opacity: 1;
+}
 
-const adminToggle = document.getElementById("adminToggle");
-const adminPanel = document.getElementById("adminPanel");
-const verDatos = document.getElementById("verDatos");
-const resultadoAdmin = document.getElementById("resultadoAdmin");
-const adminPass = document.getElementById("adminPass");
+/* FORMULARIO */
+.formulario {
+  margin-top: 25px;
+  animation: aparecer 0.5s ease;
+}
 
-adminToggle.addEventListener("click", () => {
-  adminPanel.style.display =
-    adminPanel.style.display === "block" ? "none" : "block";
-});
+.formulario input,
+.formulario textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
 
-verDatos.addEventListener("click", async () => {
-  if (adminPass.value !== "1234") {
-    resultadoAdmin.textContent = "Acceso denegado";
-    return;
+.formulario button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 25px;
+  border: none;
+  background: var(--acento);
+  color: white;
+  cursor: pointer;
+}
+
+/* OCULTAR */
+.oculto {
+  display: none;
+}
+
+/* ADMIN */
+.admin {
+  position: fixed;
+  bottom: 12px;
+  right: 14px;
+}
+
+#adminToggle {
+  cursor: pointer;
+  opacity: 0.3;
+}
+
+.admin-panel {
+  display: none;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+/* ANIMACIONES */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><br>";
+@keyframes latido {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
 
-  const datos = await getDocs(collection(db, "detalles"));
 
-  datos.forEach(doc => {
-    const d = doc.data();
-    resultadoAdmin.innerHTML += `
-      🗳️ ${d.respuesta}<br>
-      ${d.comida ? `🍽️ ${d.comida}<br>` : ""}
-      ${d.lugar ? `📍 ${d.lugar}<br>` : ""}
-      ${d.comentario ? `💬 ${d.comentario}<br>` : ""}
-      📅 ${d.fecha?.toDate?.().toLocaleString() || ""}
-      <hr>
-    `;
-  });
-});
