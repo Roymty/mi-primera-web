@@ -188,32 +188,34 @@ h1 {
 
 /* BORRAR DATOS (ICONO) */
 .admin-btn.rojo {
-  background-color: #e0e0e0; /* gris suave */
-  color: #555;
-  border: 1px solid #ccc;
+  background-color: transparent;
+  color: #c62828;
+  border: 2px solid #c62828;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .admin-btn.rojo:hover {
-  background-color: #c62828;  /* rojo */
-  color: #fff;
+  background-color: #c62828;
+  color: white;
 }
 
 /* SOLO ICONO */
 .admin-btn.icono {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   padding: 0;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ================= BOTÓN BORRAR EN LADO OPUESTO ===== */
+/* ================= BOTÓN BORRAR DENTRO DE ADMIN ===== */
 
-.admin-borrar {
-  position: fixed;
-  bottom: 12px;
-  left: 14px;   /* 👈 lado izquierdo */
-  z-index: 999;
+.admin-panel button {
+  margin-top: 10px;
 }
