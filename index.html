@@ -4,20 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitación</title>
-  <link rel="stylesheet" href="estilos.css?v=6"> <!-- Vincula el archivo CSS -->
+  <link rel="stylesheet" href="estilos.css?v=6">
 </head>
 <body>
 
-<!-- Contenedor principal -->
 <main class="container">
   <section class="card">
 
-    <!-- Mensaje de invitación -->
     <div id="invitacion">
       <h1>Hola</h1>
 
       <img
-        src="https://cdn-icons-png.flaticon.com/512/833/833472.png" <!-- Icono de corazón -->
+        src="https://cdn-icons-png.flaticon.com/512/833/833472.png"
         alt="corazón"
         class="icono"
       >
@@ -28,21 +26,18 @@
       </p>
     </div>
 
-    <!-- Botones de respuesta -->
     <div class="acciones">
       <button class="btn si" id="btnSi">Sí</button>
       <button class="btn no" id="btnNo">No</button>
     </div>
 
-    <!-- Mensajes de agradecimiento -->
     <p id="mensaje" class="mensaje"></p>
 
-    <!-- Mensaje si la respuesta es negativa -->
     <p id="mensajeNo" class="mensaje oculto">
       Está bien, gracias por tu sinceridad 😊
     </p>
 
-    <!-- Formulario que aparece si la respuesta es afirmativa -->
+    <!-- FORMULARIO -->
     <form id="formulario" class="formulario oculto">
       <p id="mensajeFinal" class="mensaje fade-in">
         Perfecto, ahora cuéntame un poco más 😊
@@ -58,23 +53,17 @@
   </section>
 </main>
 
-<!-- Panel de administración, solo visible si se activa -->
+<!-- ADMIN -->
 <div class="admin">
   <span id="adminToggle">•</span>
 
   <div class="admin-panel" id="adminPanel">
-    <!-- Campos para las contraseñas de acceso -->
-    <input type="password" id="adminPass" placeholder="Contraseña para admin">
-    <input type="password" id="deletePass" placeholder="Contraseña para borrar">
-
-    <!-- Botones de administración -->
+    <input type="password" id="adminPass" placeholder="Contraseña">
     <button id="verDatos">Ver respuestas</button>
-    <button id="borrarDatos">Borrar datos</button> <!-- Botón para borrar los datos -->
-    <div id="resultadoAdmin"></div> <!-- Resultado de las acciones de administración -->
+    <div id="resultadoAdmin"></div>
   </div>
 </div>
 
-<script type="module" src="script.js"></script> <!-- Enlaza el archivo JavaScript -->
+<script type="module" src="script.js"></script>
 </body>
 </html>
-
