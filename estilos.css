@@ -1,28 +1,28 @@
 :root {
-  --fondo: linear-gradient(135deg, #fdfbfb, #f3f1f1);
-  --texto: #2e2e2e;
-  --suave: #777;
-  --acento: #c89b7b;
-  --acento-hover: #b38668;
+  --fondo: linear-gradient(135deg, #fdfbfb, #f3f1f1); /* Fondo de gradiente */
+  --texto: #2e2e2e; /* Color del texto principal */
+  --suave: #777; /* Color de texto secundario */
+  --acento: #c89b7b; /* Color de acento */
+  --acento-hover: #b38668; /* Color de acento en hover */
 }
 
-/* RESET */
+/* Reset CSS */
 * {
   box-sizing: border-box;
-  font-family: 'Georgia', serif;
+  font-family: 'Georgia', serif; /* Usamos una fuente serif */
 }
 
-/* BODY */
+/* Estilo del body */
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--fondo);
+  background: var(--fondo); /* Fondo de la página */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* CONTENEDOR */
+/* Estilo del contenedor principal */
 .container {
   width: 100%;
   padding: 20px;
@@ -30,7 +30,7 @@ body {
   justify-content: center;
 }
 
-/* TARJETA */
+/* Estilo de la tarjeta de invitación */
 .card {
   background: white;
   padding: 40px 35px;
@@ -38,37 +38,37 @@ body {
   width: 100%;
   text-align: center;
   border-radius: 18px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.12); /* Sombra para dar profundidad */
   transition: padding 0.4s ease;
 }
 
-/* 👇 TARJETA COMPACTA */
+/* Estilo cuando la tarjeta se compacta */
 .card.compacta {
   padding-top: 25px;
   padding-bottom: 28px;
 }
 
-/* TITULO */
+/* Estilo del título */
 h1 {
   font-weight: normal;
   color: var(--texto);
 }
 
-/* TEXTO */
+/* Estilo del texto */
 .texto {
   color: var(--suave);
   line-height: 1.7;
 }
 
-/* ICONO */
+/* Estilo del icono */
 .icono {
   width: 38px;
   opacity: 0.4;
   margin-bottom: 12px;
-  animation: latido 3s infinite ease-in-out;
+  animation: latido 3s infinite ease-in-out; /* Animación de latido para el icono */
 }
 
-/* BOTONES */
+/* Estilo de los botones */
 .acciones {
   margin-top: 30px;
   display: flex;
@@ -98,7 +98,7 @@ h1 {
   border: 1px solid #ccc;
 }
 
-/* MENSAJES */
+/* Estilo de los mensajes */
 .mensaje {
   margin-top: 25px;
   color: var(--suave);
@@ -110,7 +110,7 @@ h1 {
   opacity: 1;
 }
 
-/* FORMULARIO */
+/* Estilo del formulario */
 .formulario {
   margin-top: 25px;
   animation: aparecer 0.5s ease;
@@ -136,12 +136,7 @@ h1 {
   cursor: pointer;
 }
 
-/* OCULTAR */
-.oculto {
-  display: none;
-}
-
-/* ADMIN */
+/* Estilo para el panel de administración */
 .admin {
   position: fixed;
   bottom: 12px;
@@ -161,7 +156,21 @@ h1 {
   margin-top: 10px;
 }
 
-/* ANIMACIONES */
+#borrarDatos {
+  background: #ff4d4d; /* Botón rojo para indicar peligro */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#borrarDatos:hover {
+  background: #e60000;
+}
+
+/* Animaciones */
 @keyframes aparecer {
   from {
     opacity: 0;
