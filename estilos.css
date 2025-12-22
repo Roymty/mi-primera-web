@@ -160,6 +160,29 @@ h1 {
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
 }
 
+/* ===== BOTONES ADMIN ===== */
+
+.admin-btn {
+  padding: 6px 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* BOTÓN SOLO ICONO */
+.admin-btn.icono {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* VER RESPUESTAS - VERDE */
 .admin-btn.verde {
   background: #4caf50;
@@ -168,8 +191,6 @@ h1 {
 
 .admin-btn.verde:hover {
   background: #43a047;
-  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.35);
-  transform: translateY(-1px);
 }
 
 /* BORRAR RESPUESTAS - ROJO */
@@ -180,9 +201,8 @@ h1 {
 
 .admin-btn.rojo:hover {
   background: #d32f2f;
-  box-shadow: 0 6px 15px rgba(229, 57, 53, 0.35);
-  transform: translateY(-1px);
 }
+
 
 @keyframes aparecer {
   from {
@@ -199,4 +219,5 @@ h1 {
   0%,100% { transform: scale(1); }
   50% { transform: scale(1.08); }
 }
+
 
