@@ -3,8 +3,7 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs,
-  serverTimestamp
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ================= FIREBASE ================= */
@@ -32,83 +31,72 @@ const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
 const card = document.querySelector(".card");
 
-/* ================= RESET UI ================= */
+/* ================= MENSAJE VISUAL ================= */
 
-function resetUI() {
-  mensaje.textContent = "";
-  mensaje.style.opacity = 0;
-
-  mensajeFinal.classList.add("oculto");
-  mensajeNo.classList.add("oculto");
-  formulario.classList.add("oculto");
-
-  btnSi.style.display = "inline-block";
-  btnNo.style.display = "inline-block";
-
-  invitacion.style.display = "block";
-  card.classList.remove("compacta");
-}
-
-resetUI();
-
-/* ================= BOTÓN SÍ ================= */
-
-btnSi.addEventListener("click", async () => {
-  await addDoc(collection(db, "respuestas"), {
-    respuesta: "Sí",
-    fecha: serverTimestamp()
-  });
+function mostrarGracias() {
+  mensaje.textContent = "Gracias por responder 😊";
+  mensaje.style.opacity = 1;
 
   btnSi.style.display = "none";
   btnNo.style.display = "none";
-  invitacion.style.display = "none";
-
-  mensaje.textContent = "";
-  mensaje.style.opacity = 0;
 
   setTimeout(() => {
-    card.classList.add("compacta");
-    mensajeFinal.classList.remove("oculto");
+    mensaje.style.opacity = 0;
+  }, 1000);
+}
+
+/* ================= BOTÓN SÍ ================= */
+
+btnSi.addEventListener("click", () => {
+  mostrarGracias();
+
+  card.classList.add("compacta");
+  invitacion.style.display = "none";
+
+  setTimeout(() => {
     formulario.classList.remove("oculto");
+    mensajeFinal.style.opacity = 1;
   }, 300);
 });
 
 /* ================= BOTÓN NO ================= */
 
 btnNo.addEventListener("click", async () => {
-  await addDoc(collection(db, "respuestas"), {
+  mostrarGracias();
+
+  await addDoc(collection(db, "detalles"), {
     respuesta: "No",
-    fecha: serverTimestamp()
+    fecha: new Date()
   });
 
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
+  card.classList.add("compacta");
   invitacion.style.display = "none";
-
-  mensajeFinal.classList.add("oculto");
 
   setTimeout(() => {
     mensajeNo.classList.remove("oculto");
+    mensajeNo.style.opacity = 1;
   }, 300);
 });
 
-/* ================= FORMULARIO ================= */
+/* ================= FORMULARIO (SÍ + DETALLES) ================= */
 
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   await addDoc(collection(db, "detalles"), {
-    comida: document.getElementById("comida").value,
-    lugar: document.getElementById("lugar").value,
-    comentario: document.getElementById("comentario").value,
-    fecha: serverTimestamp()
+    respuesta: "Sí",
+    comida: comida.value,
+    lugar: lugar.value,
+    comentario: comentario.value,
+    fecha: new Date()
   });
 
-  formulario.reset();
-  formulario.classList.add("oculto");
+  formulario.querySelectorAll("input, textarea, button").forEach(el => {
+    el.style.display = "none";
+  });
 
   mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
-  mensajeFinal.classList.remove("oculto");
+  mensajeFinal.style.opacity = 1;
 });
 
 /* ================= ADMIN ================= */
@@ -117,6 +105,7 @@ const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
 const verDatos = document.getElementById("verDatos");
 const resultadoAdmin = document.getElementById("resultadoAdmin");
+const adminPass = document.getElementById("adminPass");
 
 adminToggle.addEventListener("click", () => {
   adminPanel.style.display =
@@ -124,30 +113,24 @@ adminToggle.addEventListener("click", () => {
 });
 
 verDatos.addEventListener("click", async () => {
-  if (document.getElementById("adminPass").value !== "1234") {
+  if (adminPass.value !== "1234") {
     resultadoAdmin.textContent = "Acceso denegado";
     return;
   }
 
-  resultadoAdmin.innerHTML = "<strong>📊 Respuestas</strong><br><br>";
+  resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><br>";
 
-  const respuestas = await getDocs(collection(db, "respuestas"));
-  respuestas.forEach(doc => {
-    const d = doc.data();
-    resultadoAdmin.innerHTML += `✔️ ${d.respuesta}<br>`;
-  });
+  const datos = await getDocs(collection(db, "detalles"));
 
-  resultadoAdmin.innerHTML += "<hr><strong>🍽️ Detalles</strong><br><br>";
-
-  const detalles = await getDocs(collection(db, "detalles"));
-  detalles.forEach(doc => {
+  datos.forEach(doc => {
     const d = doc.data();
     resultadoAdmin.innerHTML += `
-      <div style="margin-bottom:12px">
-        🍽️ <strong>Comida:</strong> ${d.comida}<br>
-        📍 <strong>Lugar:</strong> ${d.lugar}<br>
-        💬 <strong>Comentario:</strong> ${d.comentario || "—"}
-      </div>
+      🗳️ ${d.respuesta}<br>
+      ${d.comida ? `🍽️ ${d.comida}<br>` : ""}
+      ${d.lugar ? `📍 ${d.lugar}<br>` : ""}
+      ${d.comentario ? `💬 ${d.comentario}<br>` : ""}
+      📅 ${d.fecha?.toDate?.().toLocaleString() || ""}
+      <hr>
     `;
   });
 });
