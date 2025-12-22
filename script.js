@@ -170,5 +170,3 @@ borrarDatos.addEventListener("click", async () => {
     }
   }
 });
-
-
