@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitación</title>
-  <link rel="stylesheet" href="estilos.css?v=7">
+  <link rel="stylesheet" href="estilos.css?v=1">
 </head>
 <body>
 
@@ -14,16 +14,12 @@
     <div id="invitacion">
       <h1>Hola <span id="txtInvitada"></span></h1>
 
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/833/833472.png"
-        alt="corazón"
-        class="icono"
-      >
+      <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" class="icono">
 
       <p class="texto">
-     <span id="txtInvitador"></span> me gustaría invitarte a comer un día de estos,  
-      sin compromiso, solo compartir un buen momento.
-    </p>
+        <span id="txtInvitador"></span> me gustaría invitarte a comer un día de estos,
+        sin compromiso, solo compartir un buen momento.
+      </p>
     </div>
 
     <div class="acciones">
@@ -39,13 +35,15 @@
 
     <!-- FORMULARIO -->
     <form id="formulario" class="formulario oculto">
+      <h3>Un pequeño detalle 💙</h3>
+
       <p id="mensajeFinal" class="mensaje fade-in">
         Perfecto, ahora cuéntame un poco más 😊
       </p>
 
-      <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required>
-      <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required>
-      <textarea id="comentario" placeholder="Algo que quieras agregar (opcional)"></textarea>
+      <input id="comida" placeholder="¿Qué te gustaría comer?" required>
+      <input id="lugar" placeholder="¿A dónde te gustaría ir?" required>
+      <textarea id="comentario" placeholder="Algo extra (opcional)"></textarea>
 
       <button type="submit">Enviar</button>
     </form>
@@ -56,7 +54,6 @@
 <!-- ADMIN -->
 <div class="admin">
   <span id="adminToggle">•</span>
-
   <div class="admin-panel" id="adminPanel">
     <input type="password" id="adminPass" placeholder="Contraseña">
     <button id="verDatos">Ver respuestas</button>
@@ -64,9 +61,16 @@
   </div>
 </div>
 
+<!-- CONFIG NOMBRES -->
+<div class="config">
+  <span id="configToggle">⚙</span>
+  <div class="admin-panel" id="configPanel">
+    <input id="nombreInvitador" placeholder="Tu nombre">
+    <input id="nombreInvitada" placeholder="Nombre de ella">
+    <button id="guardarNombres">Guardar</button>
+  </div>
+</div>
+
 <script type="module" src="script.js"></script>
 </body>
 </html>
-
-
-
