@@ -31,6 +31,10 @@ const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
 const card = document.querySelector(".card");
 
+const comida = document.getElementById("comida");
+const lugar = document.getElementById("lugar");
+const comentario = document.getElementById("comentario");
+
 /* ================= MENSAJE VISUAL ================= */
 
 function mostrarGracias() {
@@ -42,7 +46,7 @@ function mostrarGracias() {
 
   setTimeout(() => {
     mensaje.style.opacity = 0;
-  }, 1000);
+  }, 1400);
 }
 
 /* ================= BOTÓN SÍ ================= */
@@ -78,7 +82,7 @@ btnNo.addEventListener("click", async () => {
   }, 300);
 });
 
-/* ================= FORMULARIO (SÍ + DETALLES) ================= */
+/* ================= FORMULARIO ================= */
 
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
