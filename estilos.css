@@ -188,12 +188,14 @@ h1 {
 
 /* BORRAR DATOS (ICONO) */
 .admin-btn.rojo {
-  background-color: #c62828;
-  color: white;
+  background-color: #e0e0e0; /* gris suave */
+  color: #555;
+  border: 1px solid #ccc;
 }
 
 .admin-btn.rojo:hover {
-  background-color: #c62828;
+  background-color: #c62828;  /* rojo */
+  color: #fff;
 }
 
 /* SOLO ICONO */
@@ -207,33 +209,11 @@ h1 {
   justify-content: center;
 }
 
-/* ================= ANIMACIONES ================= */
+/* ================= BOTÓN BORRAR EN LADO OPUESTO ===== */
 
-@keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes latido {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-}
-
-/* ===== DESACTIVAR COMPLETAMENTE EFECTOS DEL BOTÓN BORRAR ===== */
-
-.admin-btn.rojo,
-.admin-btn.rojo:hover,
-.admin-btn.rojo:active,
-.admin-btn.rojo:focus {
-  background-color: #c62828 !important;
-  transition: none !important;
-  box-shadow: none !important;
-  outline: none !important;
-  transform: none !important;
+.admin-borrar {
+  position: fixed;
+  bottom: 12px;
+  left: 14px;   /* 👈 lado izquierdo */
+  z-index: 999;
 }
