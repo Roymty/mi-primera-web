@@ -224,3 +224,16 @@ h1 {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.08); }
 }
+
+/* ===== DESACTIVAR COMPLETAMENTE EFECTOS DEL BOTÓN BORRAR ===== */
+
+.admin-btn.rojo,
+.admin-btn.rojo:hover,
+.admin-btn.rojo:active,
+.admin-btn.rojo:focus {
+  background-color: #c62828 !important;
+  transition: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transform: none !important;
+}
