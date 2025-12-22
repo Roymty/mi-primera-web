@@ -3,7 +3,9 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs
+  getDocs,
+  deleteDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ================= FIREBASE ================= */
@@ -53,7 +55,6 @@ function mostrarGracias() {
 
 btnSi.addEventListener("click", () => {
   mostrarGracias();
-
   card.classList.add("compacta");
   invitacion.style.display = "none";
 
@@ -108,6 +109,7 @@ formulario.addEventListener("submit", async (e) => {
 const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
 const verDatos = document.getElementById("verDatos");
+const borrarDatos = document.getElementById("borrarDatos");
 const resultadoAdmin = document.getElementById("resultadoAdmin");
 const adminPass = document.getElementById("adminPass");
 
@@ -115,6 +117,8 @@ adminToggle.addEventListener("click", () => {
   adminPanel.style.display =
     adminPanel.style.display === "block" ? "none" : "block";
 });
+
+/* ===== VER DATOS ===== */
 
 verDatos.addEventListener("click", async () => {
   if (adminPass.value !== "1234") {
@@ -125,6 +129,11 @@ verDatos.addEventListener("click", async () => {
   resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><br>";
 
   const datos = await getDocs(collection(db, "detalles"));
+
+  if (datos.empty) {
+    resultadoAdmin.innerHTML += "No hay respuestas aún.";
+    return;
+  }
 
   datos.forEach(doc => {
     const d = doc.data();
@@ -137,4 +146,27 @@ verDatos.addEventListener("click", async () => {
       <hr>
     `;
   });
+});
+
+/* ===== BORRAR DATOS ===== */
+
+borrarDatos.addEventListener("click", async () => {
+  if (adminPass.value !== "1234") {
+    resultadoAdmin.textContent = "Acceso denegado";
+    return;
+  }
+
+  const confirmar = confirm(
+    "⚠️ ¿Seguro que deseas borrar TODAS las respuestas?\nEsta acción no se puede deshacer."
+  );
+
+  if (!confirmar) return;
+
+  const datos = await getDocs(collection(db, "detalles"));
+
+  for (const d of datos.docs) {
+    await deleteDoc(doc(db, "detalles", d.id));
+  }
+
+  resultadoAdmin.innerHTML = "🗑️ Todas las respuestas fueron borradas.";
 });
