@@ -1,1 +1,179 @@
+:root {
+  --fondo: linear-gradient(135deg, #fdfbfb, #f3f1f1);
+  --texto: #2e2e2e;
+  --suave: #777;
+  --acento: #c89b7b;
+  --acento-hover: #b38668;
+}
 
+/* RESET */
+* {
+  box-sizing: border-box;
+  font-family: 'Georgia', serif;
+}
+
+/* BODY */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--fondo);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* CONTENEDOR */
+.container {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* TARJETA */
+.card {
+  background: white;
+  padding: 40px 35px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  border-radius: 18px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+  transition: padding 0.4s ease;
+}
+
+/* 👇 TARJETA COMPACTA */
+.card.compacta {
+  padding-top: 25px;
+  padding-bottom: 28px;
+}
+
+/* TITULO */
+h1 {
+  font-weight: normal;
+  color: var(--texto);
+}
+
+/* TEXTO */
+.texto {
+  color: var(--suave);
+  line-height: 1.7;
+}
+
+/* ICONO */
+.icono {
+  width: 38px;
+  opacity: 0.4;
+  margin-bottom: 12px;
+  animation: latido 3s infinite ease-in-out;
+}
+
+/* BOTONES */
+.acciones {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+.btn {
+  padding: 13px 30px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.si {
+  background: var(--acento);
+  color: white;
+}
+
+.si:hover {
+  background: var(--acento-hover);
+}
+
+.no {
+  background: transparent;
+  border: 1px solid #ccc;
+}
+
+/* MENSAJES */
+.mensaje {
+  margin-top: 25px;
+  color: var(--suave);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+/* FORMULARIO */
+.formulario {
+  margin-top: 25px;
+  animation: aparecer 0.5s ease;
+}
+
+.formulario input,
+.formulario textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.formulario button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 25px;
+  border: none;
+  background: var(--acento);
+  color: white;
+  cursor: pointer;
+}
+
+/* OCULTAR */
+.oculto {
+  display: none;
+}
+
+/* ADMIN */
+.admin {
+  position: fixed;
+  bottom: 12px;
+  right: 14px;
+}
+
+#adminToggle {
+  cursor: pointer;
+  opacity: 0.3;
+}
+
+.admin-panel {
+  display: none;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+/* ANIMACIONES */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes latido {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
