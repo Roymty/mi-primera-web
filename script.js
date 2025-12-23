@@ -5,11 +5,10 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
-  serverTimestamp
+  doc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* ================= FIREBASE ================= */
-
+/* ================= FIREBASE CONFIG ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -23,143 +22,100 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 /* ================= ELEMENTOS ================= */
-
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
+const mensajeFinal = document.getElementById("mensajeFinal");
 const mensajeNo = document.getElementById("mensajeNo");
 const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
-const acciones = document.getElementById("acciones");
-const confirmarContraseñaInput = document.getElementById("confirmarContraseña");
+const card = document.querySelector(".card");
 
-/* ================= GUARDAR RESPUESTA ================= */
-
-async function guardarRespuesta(respuesta) {
-  await addDoc(collection(db, "respuestas"), {
-    respuesta,
-    fecha: serverTimestamp()
-  });
-
+/* ================= LÓGICA DE INTERACCIÓN ================= */
+function mostrarGracias() {
   mensaje.textContent = "Gracias por responder 😊";
   mensaje.style.opacity = 1;
-  acciones.style.display = "none";
+  btnSi.style.display = "none";
+  btnNo.style.display = "none";
+  setTimeout(() => { mensaje.style.opacity = 0; }, 1000);
 }
 
-/* ================= BOTÓN SÍ ================= */
-
-btnSi.addEventListener("click", async () => {
-  await guardarRespuesta("Sí");
-
-  // Ocultar mensaje de "Gracias por responder"
-  mensaje.style.opacity = 0;
-  
-  // Ocultar invitación
+btnSi.addEventListener("click", () => {
+  mostrarGracias();
+  card.classList.add("compacta");
   invitacion.style.display = "none";
-
-  // Mostrar formulario después de un pequeño retraso
   setTimeout(() => {
     formulario.classList.remove("oculto");
-    mensajeFinal.classList.remove("oculto");
-  }, 300);  // 300ms de retraso para dar tiempo a que se oculte el mensaje
+    mensajeFinal.style.opacity = 1;
+  }, 300);
 });
-
-/* ================= BOTÓN NO ================= */
 
 btnNo.addEventListener("click", async () => {
-  await guardarRespuesta("No");
+  mostrarGracias();
+  await addDoc(collection(db, "detalles"), {
+    respuesta: "No",
+    fecha: new Date()
+  });
+  card.classList.add("compacta");
   invitacion.style.display = "none";
-  mensajeNo.classList.remove("oculto");
+  setTimeout(() => {
+    mensajeNo.classList.remove("oculto");
+    mensajeNo.style.opacity = 1;
+  }, 300);
 });
-
-/* ================= FORMULARIO ================= */
 
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
-
   await addDoc(collection(db, "detalles"), {
-    comida: comida.value,
-    lugar: lugar.value,
-    comentario: comentario.value,
-    fecha: serverTimestamp()
+    respuesta: "Sí",
+    comida: document.getElementById("comida").value,
+    lugar: document.getElementById("lugar").value,
+    comentario: document.getElementById("comentario").value,
+    fecha: new Date()
   });
-
-  formulario.reset();
-  formulario.classList.add("oculto");
-
+  formulario.querySelectorAll("input, textarea, button").forEach(el => el.style.display = "none");
   mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
-  mensajeFinal.classList.remove("oculto");
 });
 
-/* ================= ADMIN ================= */
-
+/* ================= ADMIN & BORRADO ================= */
 const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
 const verDatos = document.getElementById("verDatos");
+const btnBorrar = document.getElementById("borrarDatos");
 const resultadoAdmin = document.getElementById("resultadoAdmin");
+const adminPass = document.getElementById("adminPass");
 
 adminToggle.addEventListener("click", () => {
-  adminPanel.style.display =
-    adminPanel.style.display === "block" ? "none" : "block";
+  adminPanel.style.display = adminPanel.style.display === "block" ? "none" : "block";
 });
 
 verDatos.addEventListener("click", async () => {
-  if (document.getElementById("adminPass").value !== "1234") {
+  if (adminPass.value !== "1234") {
     resultadoAdmin.textContent = "Acceso denegado";
     return;
   }
-
-  resultadoAdmin.innerHTML = "<strong>📊 Respuestas</strong><br><br>";
-
-  const respuestas = await getDocs(collection(db, "respuestas"));
-  respuestas.forEach(doc => {
-    const d = doc.data();
-    resultadoAdmin.innerHTML += `✔️ ${d.respuesta}<br>`;
-  });
-
-  resultadoAdmin.innerHTML += "<hr><strong>🍽️ Detalles</strong><br><br>";
-
-  const detalles = await getDocs(collection(db, "detalles"));
-  detalles.forEach(doc => {
+  resultadoAdmin.innerHTML = "Cargando...";
+  const datos = await getDocs(collection(db, "detalles"));
+  resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><hr>";
+  datos.forEach(doc => {
     const d = doc.data();
     resultadoAdmin.innerHTML += `
-      <div style="margin-bottom:12px">
-        🍽️ <strong>Comida:</strong> ${d.comida}<br>
-        📍 <strong>Lugar:</strong> ${d.lugar}<br>
-        💬 <strong>Comentario:</strong> ${d.comentario || "—"}
-      </div>
+      🗳️ ${d.respuesta} | 🍽️ ${d.comida || '-'} <br>
+      📅 ${d.fecha?.toDate?.().toLocaleString() || ""}<hr>
     `;
   });
 });
 
-/* ================= BORRAR DATOS CON CONTRASEÑA ================= */
-
-const borrarDatosBtn = document.getElementById("borrarDatos");
-
-borrarDatosBtn.addEventListener("click", async () => {
-  const password = "admin123";  // Contraseña predeterminada para borrar datos
-
-  if (confirmarContraseñaInput.value !== password) {
-    alert("Contraseña incorrecta.");
+btnBorrar.addEventListener("click", async () => {
+  if (adminPass.value !== "1234") {
+    alert("Contraseña incorrecta");
     return;
   }
-
-  if (confirm("¿Estás seguro de que deseas borrar todos los datos? Esta acción es irreversible.")) {
-    // Borrar datos de la colección "respuestas"
-    const respuestas = await getDocs(collection(db, "respuestas"));
-    respuestas.forEach(async (doc) => {
-      await deleteDoc(doc.ref);
-    });
-
-    // Borrar datos de la colección "detalles"
-    const detalles = await getDocs(collection(db, "detalles"));
-    detalles.forEach(async (doc) => {
-      await deleteDoc(doc.ref);
-    });
-
-    alert("Todos los datos han sido borrados.");
-    confirmarContraseñaInput.value = "";  // Limpiar el campo de contraseña
-  } else {
-    alert("Operación cancelada.");
+  if (confirm("¿Estás seguro de borrar TODA la información?")) {
+    const datos = await getDocs(collection(db, "detalles"));
+    const promesas = datos.docs.map(d => deleteDoc(doc(db, "detalles", d.id)));
+    await Promise.all(promesas);
+    resultadoAdmin.innerHTML = "✅ Datos borrados";
+    alert("Información eliminada");
   }
 });
