@@ -1,36 +1,30 @@
 :root {
-  --fondo: linear-gradient(135deg, #fdfbfb, #f3f1f1);
-  --texto: #2e2e2e;
-  --suave: #777;
   --acento: #c89b7b;
   --acento-hover: #b38668;
+  --texto: #333;
+  --suave: #777;
 }
 
-/* RESET */
 * {
   box-sizing: border-box;
-  font-family: 'Georgia', serif;
+  font-family: Georgia, serif;
 }
 
-/* BODY */
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--fondo);
+  background: linear-gradient(135deg, #fdfbfb, #f1f1f1);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* CONTENEDOR */
 .container {
   width: 100%;
-  padding: 20px;
   display: flex;
   justify-content: center;
 }
 
-/* TARJETA */
 .card {
   background: white;
   padding: 40px 35px;
@@ -39,49 +33,38 @@ body {
   text-align: center;
   border-radius: 18px;
   box-shadow: 0 25px 50px rgba(0,0,0,0.12);
-  transition: padding 0.4s ease;
 }
 
-/* 👇 TARJETA COMPACTA */
-.card.compacta {
-  padding-top: 25px;
-  padding-bottom: 28px;
+.icono {
+  width: 38px;
+  opacity: 0.4;
+  margin-bottom: 12px;
+  animation: latido 3s infinite;
 }
 
-/* TITULO */
 h1 {
   font-weight: normal;
   color: var(--texto);
 }
 
-/* TEXTO */
 .texto {
   color: var(--suave);
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
-/* ICONO */
-.icono {
-  width: 38px;
-  opacity: 0.4;
-  margin-bottom: 12px;
-  animation: latido 3s infinite ease-in-out;
-}
-
-/* BOTONES */
 .acciones {
   margin-top: 30px;
   display: flex;
+  gap: 20px;
   justify-content: center;
-  gap: 18px;
 }
 
 .btn {
-  padding: 13px 30px;
+  padding: 12px 28px;
   border-radius: 30px;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 .si {
@@ -89,31 +72,28 @@ h1 {
   color: white;
 }
 
-.si:hover {
-  background: var(--acento-hover);
-}
-
 .no {
   background: transparent;
   border: 1px solid #ccc;
 }
 
-/* MENSAJES */
+.btn:hover {
+  transform: translateY(-2px);
+}
+
 .mensaje {
   margin-top: 25px;
-  color: var(--suave);
+  font-style: italic;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.4s;
 }
 
 .fade-in {
   opacity: 1;
 }
 
-/* FORMULARIO */
 .formulario {
   margin-top: 25px;
-  animation: aparecer 0.5s ease;
 }
 
 .formulario input,
@@ -121,22 +101,18 @@ h1 {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
 }
 
 .formulario button {
   margin-top: 15px;
   width: 100%;
-  padding: 12px;
-  border-radius: 25px;
-  border: none;
+  padding: 10px;
   background: var(--acento);
   color: white;
-  cursor: pointer;
+  border: none;
+  border-radius: 25px;
 }
 
-/* OCULTAR */
 .oculto {
   display: none;
 }
@@ -149,8 +125,8 @@ h1 {
 }
 
 #adminToggle {
-  cursor: pointer;
   opacity: 0.3;
+  cursor: pointer;
 }
 
 .admin-panel {
@@ -158,24 +134,12 @@ h1 {
   background: white;
   padding: 12px;
   border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   margin-top: 10px;
-}
-
-/* ANIMACIONES */
-@keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  font-size: 0.85rem;
 }
 
 @keyframes latido {
   0%,100% { transform: scale(1); }
   50% { transform: scale(1.08); }
 }
-
-
