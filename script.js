@@ -100,5 +100,3 @@ document.getElementById("borrarDatos").onclick = async () => {
         location.reload();
     }
 };
-
-
