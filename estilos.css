@@ -1,1 +1,136 @@
+:root {
+  --fondo: linear-gradient(135deg, #fdfbfb, #ebedee);
+  --texto: #2e2e2e;
+  --suave: #666;
+  --acento: #c89b7b;
+  --acento-hover: #b38668;
+}
 
+* { box-sizing: border-box; font-family: 'Georgia', serif; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--fondo);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container { width: 100%; padding: 20px; display: flex; justify-content: center; }
+
+.card {
+  background: white;
+  padding: 40px 30px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  transition: all 0.5s ease;
+}
+
+.card.compacta { padding: 30px 25px; }
+
+.icono {
+  width: 45px;
+  opacity: 0.7;
+  margin-bottom: 20px;
+  animation: latido 2.5s infinite ease-in-out;
+}
+
+.acciones { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
+
+.btn {
+  padding: 12px 35px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 16px;
+}
+
+.si { background: var(--acento); color: white; }
+.si:hover { transform: scale(1.05); background: var(--acento-hover); }
+.no { background: transparent; border: 1px solid #ddd; color: var(--suave); }
+
+.oculto { display: none !important; }
+
+.mensaje-flotante { height: 20px; color: var(--acento); font-size: 14px; margin: 15px 0; opacity: 0; transition: 0.4s; }
+
+.formulario input, .formulario textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  background: #fdfdfd;
+}
+
+.formulario button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 30px;
+  border: none;
+  background: var(--acento);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ADMIN RESPUESTAS */
+.admin { position: fixed; bottom: 15px; right: 15px; z-index: 1000; }
+#adminToggle { cursor: pointer; opacity: 0.2; font-size: 24px; }
+.admin-panel {
+  display: none; background: white; padding: 20px; border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 300px; position: absolute; bottom: 40px; right: 0;
+}
+#resultadoAdmin { max-height: 400px; overflow-y: auto; margin-top: 20px; }
+.admin-acciones { display: flex; gap: 8px; margin-top: 10px; }
+.btn-borrar { color: #d9534f; border: 1px solid #d9534f !important; background: #fff5f5; }
+
+/* NUEVO: ADMIN NOMBRES CENTRADO */
+.admin-nombres-centro {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    text-align: center;
+}
+
+.admin-icon { cursor: pointer; opacity: 0.2; font-size: 24px; color: var(--acento); }
+.admin-icon:hover { opacity: 1; }
+
+.card-admin-mini {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+    width: 250px;
+}
+
+.card-admin-mini input {
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.acciones-admin { display: flex; gap: 5px; }
+.acciones-admin button {
+    flex: 1; padding: 8px; border: none; border-radius: 20px; cursor: pointer; font-size: 12px;
+}
+
+#btnGuardar { background: var(--acento); color: white; }
+.btn-borrar-nombres { background: #fff; border: 1px solid #d9534f; color: #d9534f; }
+
+@keyframes latido {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
