@@ -1,58 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invitación Especial</title>
-  <link rel="stylesheet" href="estilos.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación Especial</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<main class="container">
-  <section class="card" id="mainCard">
-    <div id="invitacion">
-      <h1>Hola</h1>
-      <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="corazón" class="icono">
-      <p class="texto">
-        Me gustaría invitarte a comer un día de estos, <br>
-        sin compromiso, solo compartir un buen momento.
-      </p>
-      <div class="acciones">
-        <button class="btn si" id="btnSi">Sí</button>
-        <button class="btn no" id="btnNo">No</button>
-      </div>
+    <div class="invitacion-container">
+        <h1>Hola, <span id="nombre-invitado" class="resaltado">Invitado</span></h1>
+        
+        <p class="mensaje">
+            Te invito cordialmente a mi evento el día 
+            <span id="fecha-evento" class="resaltado">Cargando fecha...</span>.
+        </p>
+
+        <p class="firma">
+            Atentamente: <span id="nombre-remitente" class="resaltado">Anfitrión</span>
+        </p>
     </div>
 
-    <p id="mensajeEstado" class="mensaje-flotante"></p>
+    <div class="admin-panel">
+        <h3>Panel de Control</h3>
+        <div class="inputs-group">
+            <input type="text" id="input-invitado" placeholder="Nombre del invitado">
+            <input type="text" id="input-remitente" placeholder="Tu nombre (quien invita)">
+        </div>
+        
+        <div class="botones-group">
+            <button onclick="guardarYGenerar()" class="btn-guardar">Guardar y Crear Link</button>
+            <button onclick="borrarTodo()" class="btn-borrar">Borrar Base de Datos</button>
+        </div>
 
-    <div id="mensajeNo" class="oculto">
-      <p class="texto-final">Está bien, gracias por tu sinceridad 😊</p>
+        <div id="contenedor-link" class="link-box" style="display: none;">
+            <p>Copia este link para enviarlo:</p>
+            <input type="text" id="link-resultado" readonly>
+        </div>
     </div>
 
-    <form id="formulario" class="formulario oculto">
-      <p id="mensajeFinal" class="mensaje-exito">Perfecto, ahora cuéntame un poco más 😊</p>
-      <div id="camposForm">
-        <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required minlength="3">
-        <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required minlength="3">
-        <textarea id="comentario" placeholder="Algo que quieras agregar (opcional)"></textarea>
-        <button type="submit" id="btnEnviar">Enviar</button>
-      </div>
-    </form>
-  </section>
-</main>
-
-<div class="admin">
-  <span id="adminToggle">•</span>
-  <div class="admin-panel" id="adminPanel">
-    <input type="password" id="adminPass" placeholder="Contraseña Admin">
-    <div class="admin-acciones">
-      <button id="verDatos">Ver respuestas</button>
-      <button id="borrarDatos" class="btn-borrar">Borrar Todo</button>
-    </div>
-    <div id="resultadoAdmin"></div>
-  </div>
-</div>
-
-<script type="module" src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
