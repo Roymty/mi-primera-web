@@ -1,14 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc
+import { 
+  getFirestore, collection, addDoc, getDocs, deleteDoc, doc 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* ================= FIREBASE ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -21,141 +15,103 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ================= ELEMENTOS ================= */
+// Referencias
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
-const mensaje = document.getElementById("mensaje");
-const mensajeFinal = document.getElementById("mensajeFinal");
-const mensajeNo = document.getElementById("mensajeNo");
-const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
-const card = document.querySelector(".card");
+const formulario = document.getElementById("formulario");
+const mensajeNo = document.getElementById("mensajeNo");
+const mensajeEstado = document.getElementById("mensajeEstado");
+const mainCard = document.getElementById("mainCard");
 
-/* ================= LÓGICA USUARIO ================= */
+// --- Lógica Usuario ---
 
-function mostrarGracias() {
-  mensaje.textContent = "Gracias por responder 😊";
-  mensaje.style.opacity = 1;
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
-  setTimeout(() => { mensaje.style.opacity = 0; }, 1000);
-}
+const notificar = (texto) => {
+  mensajeEstado.textContent = texto;
+  mensajeEstado.style.opacity = 1;
+  setTimeout(() => { mensajeEstado.style.opacity = 0; }, 2500);
+};
 
-btnSi.addEventListener("click", () => {
-  mostrarGracias();
-  card.classList.add("compacta");
-  invitacion.style.display = "none";
-  setTimeout(() => {
-    formulario.classList.remove("oculto");
-    mensajeFinal.style.opacity = 1;
-  }, 300);
-});
+btnSi.onclick = () => {
+  invitacion.classList.add("oculto");
+  mainCard.classList.add("compacta");
+  formulario.classList.remove("oculto");
+};
 
-btnNo.addEventListener("click", async () => {
-  mostrarGracias();
-  await addDoc(collection(db, "detalles"), { respuesta: "No", fecha: new Date() });
-  card.classList.add("compacta");
-  invitacion.style.display = "none";
-  setTimeout(() => {
+btnNo.onclick = async () => {
+  btnNo.disabled = true;
+  notificar("Guardando respuesta...");
+  try {
+    await addDoc(collection(db, "detalles"), { respuesta: "No", fecha: new Date() });
+    invitacion.classList.add("oculto");
     mensajeNo.classList.remove("oculto");
-    mensajeNo.style.opacity = 1;
-  }, 300);
-});
+  } catch (e) {
+    notificar("Error de conexión ❌");
+    btnNo.disabled = false;
+  }
+};
 
-formulario.addEventListener("submit", async (e) => {
+formulario.onsubmit = async (e) => {
   e.preventDefault();
-  
-  const comidaVal = document.getElementById("comida").value;
-  const lugarVal = document.getElementById("lugar").value;
-  const comentarioVal = document.getElementById("comentario").value;
+  const btnEnviar = document.getElementById("btnEnviar");
+  btnEnviar.disabled = true;
+  btnEnviar.textContent = "Enviando...";
 
-  // VALIDACIÓN: Permite letras, números y símbolos comunes, pero no SOLO números.
-  const regexBasico = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.,'#]+$/;
-  const soloNumeros = /^\d+$/;
-
-  if (!regexBasico.test(comidaVal) || !regexBasico.test(lugarVal)) {
-    alert("Por favor, usa caracteres normales (letras, números, espacios).");
-    return;
-  }
-
-  if (soloNumeros.test(comidaVal) || soloNumeros.test(lugarVal)) {
-    alert("El nombre de la comida o el lugar debe contener letras.");
-    return;
-  }
-
-  await addDoc(collection(db, "detalles"), {
+  const datos = {
     respuesta: "Sí",
-    comida: comidaVal,
-    lugar: lugarVal,
-    comentario: comentarioVal,
+    comida: document.getElementById("comida").value,
+    lugar: document.getElementById("lugar").value,
+    comentario: document.getElementById("comentario").value,
     fecha: new Date()
-  });
-  
-  document.getElementById("comida").style.display = "none";
-  document.getElementById("lugar").style.display = "none";
-  document.getElementById("comentario").style.display = "none";
-  formulario.querySelector("button").style.display = "none";
-  mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
-});
+  };
 
-/* ================= LÓGICA ADMIN ================= */
+  try {
+    await addDoc(collection(db, "detalles"), datos);
+    document.getElementById("camposForm").classList.add("oculto");
+    document.getElementById("mensajeFinal").textContent = "¡Gracias! Lo tomaré muy en cuenta 😊";
+  } catch (e) {
+    notificar("Error al guardar ❌");
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = "Enviar";
+  }
+};
 
+// --- Lógica Admin ---
 const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
-const verDatos = document.getElementById("verDatos");
-const btnBorrar = document.getElementById("borrarDatos");
-const resultadoAdmin = document.getElementById("resultadoAdmin");
 const adminPass = document.getElementById("adminPass");
+const resultadoAdmin = document.getElementById("resultadoAdmin");
 
-adminToggle.addEventListener("click", () => {
+adminToggle.onclick = () => {
   adminPanel.style.display = adminPanel.style.display === "block" ? "none" : "block";
-});
+};
 
-verDatos.addEventListener("click", async () => {
-  if (adminPass.value !== "1234") {
-    resultadoAdmin.textContent = "Acceso denegado";
-    return;
-  }
+document.getElementById("verDatos").onclick = async () => {
+  if (adminPass.value !== "1234") return alert("Contraseña incorrecta");
+  
   resultadoAdmin.innerHTML = "Cargando...";
-  try {
-    const datos = await getDocs(collection(db, "detalles"));
-    resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><hr>";
-    if (datos.empty) { resultadoAdmin.innerHTML += "Sin respuestas."; return; }
+  const querySnapshot = await getDocs(collection(db, "detalles"));
+  resultadoAdmin.innerHTML = "";
+  
+  if (querySnapshot.empty) resultadoAdmin.innerHTML = "No hay respuestas.";
 
-    datos.forEach(doc => {
-      const d = doc.data();
-      resultadoAdmin.innerHTML += `
-        <strong>🗳️ Respuesta:</strong> ${d.respuesta}<br>
-        ${d.comida ? `<strong>🍽️ Comida:</strong> ${d.comida}<br>` : ""}
-        ${d.lugar ? `<strong>📍 Lugar:</strong> ${d.lugar}<br>` : ""}
-        ${d.comentario ? `<strong>💬 Nota:</strong> ${d.comentario}<br>` : ""}
-        <div style="margin-top: 6px; font-size: 13px; color: #222;">
-          <strong>📅 Fecha: ${d.fecha?.toDate?.().toLocaleString() || "Sin fecha"}</strong>
-        </div>
-        <hr style="border: 0.5px solid #eee; margin: 10px 0;">
-      `;
-    });
-  } catch (e) { resultadoAdmin.innerHTML = "Error de conexión."; }
-});
+  querySnapshot.forEach((doc) => {
+    const d = doc.data();
+    const fecha = d.fecha?.toDate ? d.fecha.toDate().toLocaleString() : "Sin fecha";
+    resultadoAdmin.innerHTML += `
+      <div style="border-bottom: 1px solid #eee; padding: 10px 0;">
+        <b>${d.respuesta}</b> - ${fecha}<br>
+        <small>${d.comida || ''} en ${d.lugar || ''}</small>
+      </div>`;
+  });
+};
 
-btnBorrar.addEventListener("click", async () => {
-  if (adminPass.value !== "1234") {
-    alert("Acceso denegado al panel.");
-    return;
+document.getElementById("borrarDatos").onclick = async () => {
+  if (adminPass.value !== "1234") return;
+  const master = prompt("Contraseña Maestra:");
+  if (master === "1349164" && confirm("¿Borrar todo?")) {
+    const snapshot = await getDocs(collection(db, "detalles"));
+    for (const d of snapshot.docs) { await deleteDoc(doc(db, "detalles", d.id)); }
+    resultadoAdmin.innerHTML = "Base de datos limpia.";
   }
-
-  // CONTRASEÑA MAESTRA SOLICITADA
-  const passMaestra = prompt("🔐 INGRESA LA CONTRASEÑA MAESTRA DE BORRADO:");
-
-  if (passMaestra === "1349164") {
-    if (confirm("¿Estás seguro de borrar TODAS las respuestas? Esto es irreversible.")) {
-      const datos = await getDocs(collection(db, "detalles"));
-      const promesas = datos.docs.map(d => deleteDoc(doc(db, "detalles", d.id)));
-      await Promise.all(promesas);
-      resultadoAdmin.innerHTML = "✅ Base de datos borrada.";
-      alert("Información eliminada correctamente.");
-    }
-  } else {
-    alert("Contraseña maestra incorrecta.");
-  }
-});
+};
