@@ -27,14 +27,14 @@ body {
 
 .acciones { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
 
-.btn { padding: 12px 35px; border-radius: 30px; border: none; cursor: pointer; font-size: 16px; }
+.btn { padding: 12px 35px; border-radius: 30px; border: none; cursor: pointer; font-size: 16px; transition: 0.3s; }
 
 .si { background: var(--acento); color: white; }
 .no { background: transparent; border: 1px solid #ddd; color: var(--suave); }
 
 .oculto { display: none !important; }
 
-.mensaje-flotante { height: 20px; color: var(--acento); font-size: 14px; margin: 15px 0; opacity: 0; }
+.mensaje-flotante { height: 20px; color: var(--acento); font-size: 14px; margin: 15px 0; opacity: 0; transition: 0.3s; }
 
 .formulario input, .formulario textarea {
   width: 100%; padding: 12px; margin-top: 12px; border-radius: 10px; border: 1px solid #eee;
@@ -49,7 +49,6 @@ body {
 .punto-secreto { cursor: pointer; opacity: 0.3; font-size: 20px; font-weight: bold; color: var(--acento); }
 .punto-secreto:hover { opacity: 1; }
 
-/* Posición Nombres (Centro) */
 .admin-nombres-centro { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; }
 .card-admin-mini {
     background: white; padding: 15px; border-radius: 15px; border: 1px solid #eee;
@@ -57,7 +56,6 @@ body {
     display: flex; flex-direction: column; gap: 8px;
 }
 
-/* Posición Respuestas (Derecha) */
 .admin-respuestas-derecha { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
 .admin-panel {
   background: white; padding: 20px; border-radius: 15px; width: 300px;
@@ -70,4 +68,3 @@ body {
 .btn-borrar-rojo, .btn-borrar { background: #fff; border: 1px solid #d9534f; color: #d9534f; }
 
 @keyframes latido { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-
