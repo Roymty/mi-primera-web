@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitación Especial</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<main class="container">
+  <section class="card" id="mainCard">
+    <div id="invitacion">
+      <h1>Hola <span id="nombreInvitado">...</span></h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="corazón" class="icono">
+      <p class="texto">
+        Me gustaría invitarte a comer un día de estos, <br>
+        sin compromiso, solo compartir un buen momento.
+        <br><br>
+        <small>Atentamente: <strong id="nombreAnfitrion">...</strong></small>
+      </p>
+      <div class="acciones">
+        <button class="btn si" id="btnSi">Sí</button>
+        <button class="btn no" id="btnNo">No</button>
+      </div>
+    </div>
+
+    <p id="mensajeEstado" class="mensaje-flotante"></p>
+
+    <div id="mensajeNo" class="oculto">
+      <p class="texto-final">Está bien, gracias por tu sinceridad 😊</p>
+    </div>
+
+    <form id="formulario" class="formulario oculto">
+      <p id="mensajeFinal" class="mensaje-exito">Perfecto, ahora cuéntame un poco más 😊</p>
+      <div id="camposForm">
+        <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required minlength="3">
+        <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required minlength="3">
+        <textarea id="comentario" placeholder="Algo que quieras agregar (opcional)"></textarea>
+        <button type="submit" id="btnEnviar">Enviar</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<div class="admin-nombres-centro">
+    <span id="toggleNombres" class="punto-secreto">N</span>
+    <div id="panelNombres" class="oculto">
+        <div class="card-admin-mini">
+            <input type="text" id="inputInvitado" placeholder="Nombre Invitado">
+            <input type="text" id="inputAnfitrion" placeholder="Tu Nombre">
+            <div class="acciones-admin">
+                <button id="btnGuardar">Guardar</button>
+                <button id="btnBorrarNombres" class="btn-borrar-rojo">Borrar Datos</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-respuestas-derecha">
+  <span id="adminToggle" class="punto-secreto">A</span>
+  <div class="admin-panel oculto" id="adminPanel">
+    <input type="password" id="adminPass" placeholder="Contraseña">
+    <div class="admin-acciones">
+      <button id="verDatos">Ver respuestas</button>
+      <button id="borrarDatos" class="btn-borrar">Borrar Todo</button>
+    </div>
+    <div id="resultadoAdmin"></div>
+  </div>
+</div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
 
