@@ -128,3 +128,4 @@ document.getElementById("borrarDatos").onclick = async () => {
     }
 };
 
+
