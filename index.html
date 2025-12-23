@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitación</title>
-  <link rel="stylesheet" href="estilos.css?v=6">
+  <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
 
@@ -14,11 +14,7 @@
     <div id="invitacion">
       <h1>Hola</h1>
 
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/833/833472.png"
-        alt="corazón"
-        class="icono"
-      >
+      <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" class="icono">
 
       <p class="texto">
         Me gustaría invitarte a comer un día de estos,
@@ -26,7 +22,7 @@
       </p>
     </div>
 
-    <div class="acciones">
+    <div class="acciones" id="acciones">
       <button class="btn si" id="btnSi">Sí</button>
       <button class="btn no" id="btnNo">No</button>
     </div>
@@ -39,13 +35,15 @@
 
     <!-- FORMULARIO -->
     <form id="formulario" class="formulario oculto">
+      <h3>Un pequeño detalle 💙</h3>
+
       <p id="mensajeFinal" class="mensaje fade-in">
         Perfecto, ahora cuéntame un poco más 😊
       </p>
 
       <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required>
       <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required>
-      <textarea id="comentario" placeholder="Algo que quieras agregar (opcional)"></textarea>
+      <textarea id="comentario" placeholder="Algo adicional (opcional)"></textarea>
 
       <button type="submit">Enviar</button>
     </form>
@@ -56,10 +54,13 @@
 <!-- ADMIN -->
 <div class="admin">
   <span id="adminToggle">•</span>
-
   <div class="admin-panel" id="adminPanel">
     <input type="password" id="adminPass" placeholder="Contraseña">
     <button id="verDatos">Ver respuestas</button>
+    
+    <!-- Botón para borrar todos los datos -->
+    <button id="borrarDatos">Borrar todos los datos</button>
+    
     <div id="resultadoAdmin"></div>
   </div>
 </div>
@@ -67,4 +68,3 @@
 <script type="module" src="script.js"></script>
 </body>
 </html>
-
