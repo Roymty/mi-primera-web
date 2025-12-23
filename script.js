@@ -73,7 +73,13 @@ formulario.addEventListener("submit", async (e) => {
     comentario: document.getElementById("comentario").value,
     fecha: new Date()
   });
-  formulario.querySelectorAll("input, textarea, button").forEach(el => el.style.display = "none");
+  
+  // Ocultamos los campos pero dejamos el mensaje
+  document.getElementById("comida").style.display = "none";
+  document.getElementById("lugar").style.display = "none";
+  document.getElementById("comentario").style.display = "none";
+  formulario.querySelector("button").style.display = "none";
+  
   mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
 });
 
@@ -95,15 +101,31 @@ verDatos.addEventListener("click", async () => {
     return;
   }
   resultadoAdmin.innerHTML = "Cargando...";
-  const datos = await getDocs(collection(db, "detalles"));
-  resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><hr>";
-  datos.forEach(doc => {
-    const d = doc.data();
-    resultadoAdmin.innerHTML += `
-      🗳️ ${d.respuesta} | 🍽️ ${d.comida || '-'} <br>
-      📅 ${d.fecha?.toDate?.().toLocaleString() || ""}<hr>
-    `;
-  });
+  
+  try {
+    const datos = await getDocs(collection(db, "detalles"));
+    resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><hr>";
+    
+    if (datos.empty) {
+        resultadoAdmin.innerHTML += "No hay respuestas aún.";
+        return;
+    }
+
+    datos.forEach(doc => {
+      const d = doc.data();
+      // Mostramos toda la información detallada
+      resultadoAdmin.innerHTML += `
+        <strong>🗳️ Respuesta:</strong> ${d.respuesta}<br>
+        ${d.comida ? `<strong>🍽️ Comida:</strong> ${d.comida}<br>` : ""}
+        ${d.lugar ? `<strong>📍 Lugar:</strong> ${d.lugar}<br>` : ""}
+        ${d.comentario ? `<strong>💬 Nota:</strong> ${d.comentario}<br>` : ""}
+        <small>📅 ${d.fecha?.toDate?.().toLocaleString() || ""}</small>
+        <hr>
+      `;
+    });
+  } catch (error) {
+    resultadoAdmin.innerHTML = "Error al obtener datos";
+  }
 });
 
 btnBorrar.addEventListener("click", async () => {
