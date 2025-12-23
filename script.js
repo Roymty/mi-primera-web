@@ -3,7 +3,9 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs
+  getDocs,
+  deleteDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ================= FIREBASE ================= */
@@ -25,78 +27,57 @@ const db = getFirestore(app);
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
-const mensajeFinal = document.getElementById("mensajeFinal");
 const mensajeNo = document.getElementById("mensajeNo");
 const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
-const card = document.querySelector(".card");
+const acciones = document.getElementById("acciones");
 
-/* ================= MENSAJE VISUAL ================= */
+/* ================= GUARDAR RESPUESTA ================= */
 
-function mostrarGracias() {
+async function guardarRespuesta(respuesta) {
+  await addDoc(collection(db, "respuestas"), {
+    respuesta,
+    fecha: serverTimestamp()
+  });
+
   mensaje.textContent = "Gracias por responder 😊";
   mensaje.style.opacity = 1;
-
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
-
-  setTimeout(() => {
-    mensaje.style.opacity = 0;
-  }, 1000);
+  acciones.style.display = "none";
 }
 
 /* ================= BOTÓN SÍ ================= */
 
-btnSi.addEventListener("click", () => {
-  mostrarGracias();
-
-  card.classList.add("compacta");
+btnSi.addEventListener("click", async () => {
+  await guardarRespuesta("Sí");
   invitacion.style.display = "none";
-
-  setTimeout(() => {
-    formulario.classList.remove("oculto");
-    mensajeFinal.style.opacity = 1;
-  }, 300);
+  formulario.classList.remove("oculto");
 });
 
 /* ================= BOTÓN NO ================= */
 
 btnNo.addEventListener("click", async () => {
-  mostrarGracias();
-
-  await addDoc(collection(db, "detalles"), {
-    respuesta: "No",
-    fecha: new Date()
-  });
-
-  card.classList.add("compacta");
+  await guardarRespuesta("No");
   invitacion.style.display = "none";
-
-  setTimeout(() => {
-    mensajeNo.classList.remove("oculto");
-    mensajeNo.style.opacity = 1;
-  }, 300);
+  mensajeNo.classList.remove("oculto");
 });
 
-/* ================= FORMULARIO (SÍ + DETALLES) ================= */
+/* ================= FORMULARIO ================= */
 
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   await addDoc(collection(db, "detalles"), {
-    respuesta: "Sí",
     comida: comida.value,
     lugar: lugar.value,
     comentario: comentario.value,
-    fecha: new Date()
+    fecha: serverTimestamp()
   });
 
-  formulario.querySelectorAll("input, textarea, button").forEach(el => {
-    el.style.display = "none";
-  });
+  formulario.reset();
+  formulario.classList.add("oculto");
 
   mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
-  mensajeFinal.style.opacity = 1;
+  mensajeFinal.classList.remove("oculto");
 });
 
 /* ================= ADMIN ================= */
@@ -105,7 +86,6 @@ const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
 const verDatos = document.getElementById("verDatos");
 const resultadoAdmin = document.getElementById("resultadoAdmin");
-const adminPass = document.getElementById("adminPass");
 
 adminToggle.addEventListener("click", () => {
   adminPanel.style.display =
@@ -113,24 +93,56 @@ adminToggle.addEventListener("click", () => {
 });
 
 verDatos.addEventListener("click", async () => {
-  if (adminPass.value !== "1234") {
+  if (document.getElementById("adminPass").value !== "1234") {
     resultadoAdmin.textContent = "Acceso denegado";
     return;
   }
 
-  resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><br>";
+  resultadoAdmin.innerHTML = "<strong>📊 Respuestas</strong><br><br>";
 
-  const datos = await getDocs(collection(db, "detalles"));
+  const respuestas = await getDocs(collection(db, "respuestas"));
+  respuestas.forEach(doc => {
+    const d = doc.data();
+    resultadoAdmin.innerHTML += `✔️ ${d.respuesta}<br>`;
+  });
 
-  datos.forEach(doc => {
+  resultadoAdmin.innerHTML += "<hr><strong>🍽️ Detalles</strong><br><br>";
+
+  const detalles = await getDocs(collection(db, "detalles"));
+  detalles.forEach(doc => {
     const d = doc.data();
     resultadoAdmin.innerHTML += `
-      🗳️ ${d.respuesta}<br>
-      ${d.comida ? `🍽️ ${d.comida}<br>` : ""}
-      ${d.lugar ? `📍 ${d.lugar}<br>` : ""}
-      ${d.comentario ? `💬 ${d.comentario}<br>` : ""}
-      📅 ${d.fecha?.toDate?.().toLocaleString() || ""}
-      <hr>
+      <div style="margin-bottom:12px">
+        🍽️ <strong>Comida:</strong> ${d.comida}<br>
+        📍 <strong>Lugar:</strong> ${d.lugar}<br>
+        💬 <strong>Comentario:</strong> ${d.comentario || "—"}
+      </div>
     `;
   });
 });
+
+/* ================= BORRAR DATOS ================= */
+
+const borrarDatosBtn = document.getElementById("borrarDatos");
+
+borrarDatosBtn.addEventListener("click", async () => {
+  if (confirm("¿Estás seguro de que deseas borrar todos los datos? Esta acción es irreversible.")) {
+    // Borrar datos de la colección "respuestas"
+    const respuestas = await getDocs(collection(db, "respuestas"));
+    respuestas.forEach(async (doc) => {
+      await deleteDoc(doc.ref);
+    });
+
+    // Borrar datos de la colección "detalles"
+    const detalles = await getDocs(collection(db, "detalles"));
+    detalles.forEach(async (doc) => {
+      await deleteDoc(doc.ref);
+    });
+
+    alert("Todos los datos han sido borrados.");
+  } else {
+    alert("Operación cancelada.");
+  }
+});
+
+
