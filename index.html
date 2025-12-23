@@ -3,54 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Una invitación especial</title>
-  <link rel="stylesheet" href="estilos.css?v=20">
+  <title>Invitación Especial</title>
+  <link rel="stylesheet" href="estilos.css?v=15">
 </head>
 <body>
 
-<div class="envelope-wrapper">
-    <div id="envelope" class="close">
-        <div class="front flap"></div>
-        <div class="front pocket"></div>
-        <div class="letter">
-            <section class="card" id="mainCard">
-                <div id="invitacion">
-                    <h1>Hola <span id="nombreInvitado">...</span></h1>
-                    <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="corazón" class="icono">
-                    <p class="texto">
-                        Me gustaría invitarte a comer un día de estos, <br>
-                        sin compromiso, solo compartir un buen momento.
-                        <br><br>
-                        <small>Atentamente: <strong id="nombreAnfitrion">...</strong></small>
-                    </p>
-                    <div class="acciones">
-                        <button class="btn si" id="btnSi">Sí</button>
-                        <button class="btn no" id="btnNo">No</button>
-                    </div>
-                </div>
-
-                <div id="mensajeNo" class="oculto">
-                    <p class="texto-final">Está bien, gracias por tu sinceridad 😊</p>
-                </div>
-
-                <form id="formulario" class="formulario oculto">
-                    <p id="mensajeFinal" class="mensaje-exito">Perfecto, ahora cuéntame más 😊</p>
-                    <div id="camposForm">
-                        <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required minlength="3">
-                        <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required minlength="3">
-                        <textarea id="comentario" placeholder="Observaciones o algo extra..."></textarea>
-                        <button type="submit" id="btnEnviar">Enviar</button>
-                    </div>
-                </form>
-            </section>
-        </div>
-        <div class="hearts">
-            <div class="heart a1"></div>
-            <div class="heart a2"></div>
-            <div class="heart a3"></div>
-        </div>
+<main class="container">
+  <section class="card" id="mainCard">
+    <div id="invitacion">
+      <h1>Hola <span id="nombreInvitado">...</span></h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="corazón" class="icono">
+      <p class="texto">
+        Me gustaría invitarte a comer un día de estos, <br>
+        sin compromiso, solo compartir un buen momento.
+        <br><br>
+        <small>Atentamente: <strong id="nombreAnfitrion">...</strong></small>
+      </p>
+      <div class="acciones">
+        <button class="btn si" id="btnSi">Sí</button>
+        <button class="btn no" id="btnNo">No</button>
+      </div>
     </div>
-</div>
+
+    <p id="mensajeEstado" class="mensaje-flotante"></p>
+
+    <div id="mensajeNo" class="oculto">
+      <p class="texto-final">Está bien, gracias por tu sinceridad 😊</p>
+    </div>
+
+    <form id="formulario" class="formulario oculto">
+      <p id="mensajeFinal" class="mensaje-exito">Perfecto, ahora cuéntame un poco más 😊</p>
+      <div id="camposForm">
+        <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required minlength="3">
+        <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required minlength="3">
+        <textarea id="comentario" placeholder="Algo que quieras agregar (opcional)"></textarea>
+        <button type="submit" id="btnEnviar">Enviar</button>
+      </div>
+    </form>
+  </section>
+</main>
 
 <div class="admin-nombres-centro">
     <span id="toggleNombres" class="punto-secreto">N</span>
