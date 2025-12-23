@@ -19,6 +19,7 @@ body {
 .card {
   background: white; padding: 40px 30px; max-width: 400px; width: 100%;
   text-align: center; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  transition: all 0.5s ease;
 }
 
 .card.compacta { padding: 30px 25px; }
@@ -46,7 +47,7 @@ body {
 }
 
 /* --- ESTILOS DE ADMIN --- */
-.punto-secreto { cursor: pointer; opacity: 0.3; font-size: 20px; font-weight: bold; color: var(--acento); }
+.punto-secreto { cursor: pointer; opacity: 0.15; font-size: 20px; font-weight: bold; color: var(--acento); transition: 0.3s; }
 .punto-secreto:hover { opacity: 1; }
 
 .admin-nombres-centro { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; }
@@ -66,5 +67,7 @@ body {
 .acciones-admin button, .admin-acciones button { flex: 1; padding: 8px; border-radius: 20px; border: none; cursor: pointer; font-size: 12px; }
 #btnGuardar, #verDatos { background: var(--acento); color: white; }
 .btn-borrar-rojo, .btn-borrar { background: #fff; border: 1px solid #d9534f; color: #d9534f; }
+
+#resultadoAdmin { max-height: 200px; overflow-y: auto; margin-top: 15px; border-top: 1px solid #eee; }
 
 @keyframes latido { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
