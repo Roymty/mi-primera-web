@@ -13,51 +13,48 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* --- GESTIÓN DE NOMBRES DINÁMICOS (Punto N) --- */
+/* --- GESTIÓN DE NOMBRES (Panel N) --- */
 const nInvitado = document.getElementById("nombreInvitado");
 const nAnfitrion = document.getElementById("nombreAnfitrion");
 
-// Leer nombres de la nube al cargar
-async function cargarNombresCloud() {
-    const docSnap = await getDoc(doc(db, "configuracion", "nombres"));
-    if (docSnap.exists()) {
-        nInvitado.textContent = docSnap.data().invitado;
-        nAnfitrion.textContent = docSnap.data().anfitrion;
-    }
+async function cargarNombres() {
+    try {
+        const docSnap = await getDoc(doc(db, "configuracion", "nombres"));
+        if (docSnap.exists()) {
+            nInvitado.textContent = docSnap.data().invitado;
+            nAnfitrion.textContent = docSnap.data().anfitrion;
+        } else {
+            nInvitado.textContent = "...";
+            nAnfitrion.textContent = "...";
+        }
+    } catch (e) { console.error("Error cargando nombres:", e); }
 }
-cargarNombresCloud();
+cargarNombres();
 
-// Guardar nombres en la nube
 document.getElementById("btnGuardar").onclick = async () => {
     const inv = document.getElementById("inputInvitado").value;
     const anf = document.getElementById("inputAnfitrion").value;
     if (inv && anf) {
         await setDoc(doc(db, "configuracion", "nombres"), { invitado: inv, anfitrion: anf });
-        alert("Nombres actualizados para todos");
+        alert("Nombres guardados con éxito.");
         location.reload();
-    } else {
-        alert("Completa ambos nombres");
+    } else { alert("Completa ambos campos."); }
+};
+
+document.getElementById("btnBorrarNombres").onclick = async () => {
+    if (confirm("¿Seguro que quieres borrar los nombres de la base de datos?")) {
+        await deleteDoc(doc(db, "configuracion", "nombres"));
+        alert("Datos eliminados de la nube.");
+        location.reload();
     }
 };
 
-document.getElementById("btnBorrarNombres").onclick = () => {
-    document.getElementById("inputInvitado").value = "";
-    document.getElementById("inputAnfitrion").value = "";
-};
-
-/* --- INTERFAZ USUARIO --- */
+/* --- FLUJO DE USUARIO --- */
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mainCard = document.getElementById("mainCard");
 const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
-const mensajeEstado = document.getElementById("mensajeEstado");
-
-const notificar = (texto) => {
-    mensajeEstado.textContent = texto;
-    mensajeEstado.style.opacity = 1;
-    setTimeout(() => mensajeEstado.style.opacity = 0, 2500);
-};
 
 btnSi.onclick = () => {
     invitacion.classList.add("oculto");
@@ -66,7 +63,6 @@ btnSi.onclick = () => {
 };
 
 btnNo.onclick = async () => {
-    notificar("Guardando...");
     await addDoc(collection(db, "detalles"), { respuesta: "No", fecha: new Date() });
     invitacion.classList.add("oculto");
     document.getElementById("mensajeNo").classList.remove("oculto");
@@ -74,9 +70,6 @@ btnNo.onclick = async () => {
 
 formulario.onsubmit = async (e) => {
     e.preventDefault();
-    const btn = document.getElementById("btnEnviar");
-    btn.disabled = true;
-    
     const datos = {
         respuesta: "Sí",
         comida: document.getElementById("comida").value,
@@ -84,13 +77,12 @@ formulario.onsubmit = async (e) => {
         comentario: document.getElementById("comentario").value || "Sin comentarios",
         fecha: new Date()
     };
-
     await addDoc(collection(db, "detalles"), datos);
     document.getElementById("camposForm").classList.add("oculto");
-    document.getElementById("mensajeFinal").textContent = "¡Gracias! Lo tomaré en cuenta 😊";
+    document.getElementById("mensajeFinal").textContent = "¡Gracias! Todo se guardó correctamente 😊";
 };
 
-/* --- GESTIÓN DE ADMIN (Punto A) --- */
+/* --- GESTIÓN DE PANELES (Toggles) --- */
 document.getElementById("toggleNombres").onclick = () => {
     document.getElementById("panelNombres").classList.toggle("oculto");
 };
@@ -99,31 +91,30 @@ document.getElementById("adminToggle").onclick = () => {
     document.getElementById("adminPanel").classList.toggle("oculto");
 };
 
+/* --- GESTIÓN DE RESPUESTAS (Panel A) --- */
 document.getElementById("verDatos").onclick = async () => {
-    if (document.getElementById("adminPass").value !== "1234") return alert("Acceso Incorrecto");
+    if (document.getElementById("adminPass").value !== "1234") return alert("Clave incorrecta");
     const res = document.getElementById("resultadoAdmin");
     res.innerHTML = "Cargando...";
     
-    const q = query(collection(db, "detalles"), orderBy("fecha", "desc"));
-    const snap = await getDocs(q);
+    const snap = await getDocs(query(collection(db, "detalles"), orderBy("fecha", "desc")));
     res.innerHTML = "";
-    
     snap.forEach((doc) => {
         const d = doc.data();
         res.innerHTML += `
-            <div style="border-bottom: 1px solid #eee; padding: 10px; font-size: 12px; text-align: left;">
-                <b>${d.respuesta}</b> | 🍽️ ${d.comida || '-'}<br>
-                📍 ${d.lugar || '-'}<br>
+            <div style="font-size:12px; border-bottom:1px solid #eee; padding:10px 0; text-align:left;">
+                <b>${d.respuesta}</b> - ${d.comida || ''}<br>
+                📍 ${d.lugar || ''}<br>
                 <small>${d.fecha?.toDate().toLocaleString() || ''}</small>
             </div>`;
     });
 };
 
 document.getElementById("borrarDatos").onclick = async () => {
-    if (confirm("¿Borrar todas las respuestas?") && prompt("Contraseña Maestra:") === "1349164") {
+    if (confirm("¿Borrar todas las respuestas?") && prompt("Clave Maestra:") === "1349164") {
         const snap = await getDocs(collection(db, "detalles"));
         for (const d of snap.docs) await deleteDoc(doc(db, "detalles", d.id));
-        alert("Borrado");
+        alert("Base de datos de respuestas limpia.");
         location.reload();
     }
 };
