@@ -5,10 +5,11 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
-  doc
+  doc,
+  setDoc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* ================= FIREBASE ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -21,141 +22,126 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ================= ELEMENTOS ================= */
+/* ================= NOMBRES DESDE FIREBASE ================= */
+
+const nombreInvitadoSpan = document.getElementById("nombreInvitado");
+const nombreAnfitrionSpan = document.getElementById("nombreAnfitrion");
+
+// Función para leer los nombres de la base de datos
+async function cargarNombresCloud() {
+  const docRef = doc(db, "configuracion", "nombres");
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    nombreInvitadoSpan.textContent = data.invitado;
+    nombreAnfitrionSpan.textContent = data.anfitrion;
+  } else {
+    nombreInvitadoSpan.textContent = "[Nombre]";
+    nombreAnfitrionSpan.textContent = "[Tu Nombre]";
+  }
+}
+cargarNombresCloud();
+
+// Función para guardar los nombres en la nube
+document.getElementById("guardarNombres").addEventListener("click", async () => {
+  const inv = document.getElementById("inputInvitado").value;
+  const anf = document.getElementById("inputAnfitrion").value;
+
+  if (!inv || !anf) {
+    alert("Por favor completa ambos nombres");
+    return;
+  }
+
+  try {
+    await setDoc(doc(db, "configuracion", "nombres"), {
+      invitado: inv,
+      anfitrion: anf
+    });
+    alert("Nombres guardados en la nube. Ahora todos los verán.");
+    location.reload(); // Recargar para ver cambios
+  } catch (e) {
+    alert("Error al guardar");
+  }
+});
+
+/* ================= LÓGICA DE PANELES ================= */
+
+document.getElementById("configToggle").addEventListener("click", () => {
+  const p = document.getElementById("configPanel");
+  p.style.display = p.style.display === "block" ? "none" : "block";
+});
+
+document.getElementById("adminToggle").addEventListener("click", () => {
+  const p = document.getElementById("adminPanel");
+  p.style.display = p.style.display === "block" ? "none" : "block";
+});
+
+/* ================= LÓGICA RESPUESTAS (SÍ/NO) ================= */
+
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
-const mensaje = document.getElementById("mensaje");
-const mensajeFinal = document.getElementById("mensajeFinal");
-const mensajeNo = document.getElementById("mensajeNo");
 const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
 const card = document.querySelector(".card");
 
-/* ================= LÓGICA USUARIO ================= */
-
-function mostrarGracias() {
-  mensaje.textContent = "Gracias por responder 😊";
-  mensaje.style.opacity = 1;
-  btnSi.style.display = "none";
-  btnNo.style.display = "none";
-  setTimeout(() => { mensaje.style.opacity = 0; }, 1000);
-}
-
 btnSi.addEventListener("click", () => {
-  mostrarGracias();
   card.classList.add("compacta");
   invitacion.style.display = "none";
+  document.getElementById("btnSi").style.display = "none";
+  document.getElementById("btnNo").style.display = "none";
   setTimeout(() => {
     formulario.classList.remove("oculto");
-    mensajeFinal.style.opacity = 1;
   }, 300);
 });
 
 btnNo.addEventListener("click", async () => {
-  mostrarGracias();
   await addDoc(collection(db, "detalles"), { respuesta: "No", fecha: new Date() });
   card.classList.add("compacta");
   invitacion.style.display = "none";
-  setTimeout(() => {
-    mensajeNo.classList.remove("oculto");
-    mensajeNo.style.opacity = 1;
-  }, 300);
+  document.getElementById("btnSi").style.display = "none";
+  document.getElementById("btnNo").style.display = "none";
+  document.getElementById("mensajeNo").classList.remove("oculto");
+  document.getElementById("mensajeNo").style.opacity = 1;
 });
 
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
-  
-  const comidaVal = document.getElementById("comida").value;
-  const lugarVal = document.getElementById("lugar").value;
-  const comentarioVal = document.getElementById("comentario").value;
-
-  // VALIDACIÓN: Permite letras, números y símbolos comunes, pero no SOLO números.
-  const regexBasico = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.,'#]+$/;
-  const soloNumeros = /^\d+$/;
-
-  if (!regexBasico.test(comidaVal) || !regexBasico.test(lugarVal)) {
-    alert("Por favor, usa caracteres normales (letras, números, espacios).");
-    return;
-  }
-
-  if (soloNumeros.test(comidaVal) || soloNumeros.test(lugarVal)) {
-    alert("El nombre de la comida o el lugar debe contener letras.");
-    return;
-  }
-
   await addDoc(collection(db, "detalles"), {
     respuesta: "Sí",
-    comida: comidaVal,
-    lugar: lugarVal,
-    comentario: comentarioVal,
+    comida: document.getElementById("comida").value,
+    lugar: document.getElementById("lugar").value,
+    comentario: document.getElementById("comentario").value,
     fecha: new Date()
   });
-  
-  document.getElementById("comida").style.display = "none";
-  document.getElementById("lugar").style.display = "none";
-  document.getElementById("comentario").style.display = "none";
-  formulario.querySelector("button").style.display = "none";
-  mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
+  formulario.innerHTML = "<p class='mensaje fade-in' style='opacity:1'>Gracias, lo tomaré en cuenta 😊</p>";
 });
 
-/* ================= LÓGICA ADMIN ================= */
+/* ================= PANEL ADMIN RESPUESTAS ================= */
 
-const adminToggle = document.getElementById("adminToggle");
-const adminPanel = document.getElementById("adminPanel");
-const verDatos = document.getElementById("verDatos");
-const btnBorrar = document.getElementById("borrarDatos");
-const resultadoAdmin = document.getElementById("resultadoAdmin");
-const adminPass = document.getElementById("adminPass");
-
-adminToggle.addEventListener("click", () => {
-  adminPanel.style.display = adminPanel.style.display === "block" ? "none" : "block";
-});
-
-verDatos.addEventListener("click", async () => {
-  if (adminPass.value !== "1234") {
-    resultadoAdmin.textContent = "Acceso denegado";
-    return;
+document.getElementById("verDatos").addEventListener("click", async () => {
+  if (document.getElementById("adminPass").value !== "1234") {
+    alert("Error"); return;
   }
-  resultadoAdmin.innerHTML = "Cargando...";
-  try {
+  const res = document.getElementById("resultadoAdmin");
+  res.innerHTML = "Cargando...";
+  const datos = await getDocs(collection(db, "detalles"));
+  res.innerHTML = "";
+  datos.forEach(d => {
+    const data = d.data();
+    res.innerHTML += `<div style="border-bottom:1px solid #eee; padding:5px">
+      <b>${data.respuesta}</b> | ${data.comida || ''}<br>
+      <small>${data.fecha?.toDate().toLocaleString() || ''}</small>
+    </div>`;
+  });
+});
+
+document.getElementById("borrarDatos").addEventListener("click", async () => {
+  if (document.getElementById("adminPass").value !== "1234") return;
+  const pass = prompt("Clave Maestra:");
+  if (pass === "1349164") {
     const datos = await getDocs(collection(db, "detalles"));
-    resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><hr>";
-    if (datos.empty) { resultadoAdmin.innerHTML += "Sin respuestas."; return; }
-
-    datos.forEach(doc => {
-      const d = doc.data();
-      resultadoAdmin.innerHTML += `
-        <strong>🗳️ Respuesta:</strong> ${d.respuesta}<br>
-        ${d.comida ? `<strong>🍽️ Comida:</strong> ${d.comida}<br>` : ""}
-        ${d.lugar ? `<strong>📍 Lugar:</strong> ${d.lugar}<br>` : ""}
-        ${d.comentario ? `<strong>💬 Nota:</strong> ${d.comentario}<br>` : ""}
-        <div style="margin-top: 6px; font-size: 13px; color: #222;">
-          <strong>📅 Fecha: ${d.fecha?.toDate?.().toLocaleString() || "Sin fecha"}</strong>
-        </div>
-        <hr style="border: 0.5px solid #eee; margin: 10px 0;">
-      `;
-    });
-  } catch (e) { resultadoAdmin.innerHTML = "Error de conexión."; }
-});
-
-btnBorrar.addEventListener("click", async () => {
-  if (adminPass.value !== "1234") {
-    alert("Acceso denegado al panel.");
-    return;
-  }
-
-  // CONTRASEÑA MAESTRA SOLICITADA
-  const passMaestra = prompt("🔐 INGRESA LA CONTRASEÑA MAESTRA DE BORRADO:");
-
-  if (passMaestra === "1349164") {
-    if (confirm("¿Estás seguro de borrar TODAS las respuestas? Esto es irreversible.")) {
-      const datos = await getDocs(collection(db, "detalles"));
-      const promesas = datos.docs.map(d => deleteDoc(doc(db, "detalles", d.id)));
-      await Promise.all(promesas);
-      resultadoAdmin.innerHTML = "✅ Base de datos borrada.";
-      alert("Información eliminada correctamente.");
-    }
-  } else {
-    alert("Contraseña maestra incorrecta.");
+    datos.forEach(async (d) => await deleteDoc(doc(db, "detalles", d.id)));
+    alert("Borrado");
   }
 });
