@@ -1,4 +1,3 @@
-// Importamos las funciones necesarias de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getFirestore,
@@ -19,7 +18,6 @@ const firebaseConfig = {
   appId: "1:743465964686:web:f9dca07e62862fe47ee5df"
 };
 
-// Inicializamos la app y la base de datos
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -33,9 +31,8 @@ const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
 const card = document.querySelector(".card");
 
-/* ================= LÓGICA DE BOTONES ================= */
+/* ================= LÓGICA DE USUARIO ================= */
 
-// Función auxiliar para mostrar mensaje temporal de gracias
 function mostrarGracias() {
   mensaje.textContent = "Gracias por responder 😊";
   mensaje.style.opacity = 1;
@@ -44,21 +41,18 @@ function mostrarGracias() {
   setTimeout(() => { mensaje.style.opacity = 0; }, 1000);
 }
 
-// Evento al hacer click en SÍ
 btnSi.addEventListener("click", () => {
   mostrarGracias();
-  card.classList.add("compacta"); // Achicamos la tarjeta
-  invitacion.style.display = "none"; // Quitamos el texto inicial
+  card.classList.add("compacta");
+  invitacion.style.display = "none";
   setTimeout(() => {
-    formulario.classList.remove("oculto"); // Mostramos el formulario de comida
+    formulario.classList.remove("oculto");
     mensajeFinal.style.opacity = 1;
   }, 300);
 });
 
-// Evento al hacer click en NO
 btnNo.addEventListener("click", async () => {
   mostrarGracias();
-  // Guardamos inmediatamente que dijo que NO
   await addDoc(collection(db, "detalles"), {
     respuesta: "No",
     fecha: new Date()
@@ -71,11 +65,8 @@ btnNo.addEventListener("click", async () => {
   }, 300);
 });
 
-// Evento al enviar el formulario (cuando dijo SÍ)
 formulario.addEventListener("submit", async (e) => {
-  e.preventDefault(); // Evita que la página se recargue
-  
-  // Guardamos todos los datos en Firebase
+  e.preventDefault();
   await addDoc(collection(db, "detalles"), {
     respuesta: "Sí",
     comida: document.getElementById("comida").value,
@@ -84,7 +75,6 @@ formulario.addEventListener("submit", async (e) => {
     fecha: new Date()
   });
   
-  // Ocultamos los inputs para mostrar mensaje de éxito final
   document.getElementById("comida").style.display = "none";
   document.getElementById("lugar").style.display = "none";
   document.getElementById("comentario").style.display = "none";
@@ -93,7 +83,7 @@ formulario.addEventListener("submit", async (e) => {
   mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
 });
 
-/* ================= LÓGICA PANEL ADMIN ================= */
+/* ================= LÓGICA DE ADMINISTRACIÓN ================= */
 
 const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
@@ -102,12 +92,12 @@ const btnBorrar = document.getElementById("borrarDatos");
 const resultadoAdmin = document.getElementById("resultadoAdmin");
 const adminPass = document.getElementById("adminPass");
 
-// Abrir/Cerrar panel con el punto secreto
+// Abrir y cerrar panel
 adminToggle.addEventListener("click", () => {
   adminPanel.style.display = adminPanel.style.display === "block" ? "none" : "block";
 });
 
-// Leer datos de Firebase
+// Ver datos (Usa contraseña 1234)
 verDatos.addEventListener("click", async () => {
   if (adminPass.value !== "1234") {
     resultadoAdmin.textContent = "Acceso denegado";
@@ -121,20 +111,17 @@ verDatos.addEventListener("click", async () => {
     resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><hr>";
     
     if (datos.empty) {
-        resultadoAdmin.innerHTML += "No hay respuestas aún.";
+        resultadoAdmin.innerHTML += "No hay respuestas registradas.";
         return;
     }
 
-    // Recorremos cada respuesta encontrada
     datos.forEach(doc => {
       const d = doc.data();
-      // Formateamos la visualización (MEJORA: Incluye lugar y comentario)
       resultadoAdmin.innerHTML += `
         <strong>🗳️ Respuesta:</strong> ${d.respuesta}<br>
         ${d.comida ? `<strong>🍽️ Comida:</strong> ${d.comida}<br>` : ""}
         ${d.lugar ? `<strong>📍 Lugar:</strong> ${d.lugar}<br>` : ""}
         ${d.comentario ? `<strong>💬 Nota:</strong> ${d.comentario}<br>` : ""}
-        
         <div style="margin-top: 6px; font-size: 13px; color: #222;">
           <strong>📅 Fecha: ${d.fecha?.toDate?.().toLocaleString() || "Sin fecha"}</strong>
         </div>
@@ -142,25 +129,40 @@ verDatos.addEventListener("click", async () => {
       `;
     });
   } catch (error) {
-    resultadoAdmin.innerHTML = "Error al obtener datos";
-    console.error(error);
+    resultadoAdmin.innerHTML = "Error al conectar con la base de datos.";
   }
 });
 
-// Lógica para borrar toda la base de datos
+// Borrado masivo (Usa contraseña maestra 1349164)
 btnBorrar.addEventListener("click", async () => {
+  // Primero debe haber puesto la clave de entrada al panel
   if (adminPass.value !== "1234") {
-    alert("Contraseña incorrecta");
+    alert("Primero ingresa la contraseña de acceso al panel.");
     return;
   }
-  
-  if (confirm("¿Estás seguro de borrar TODA la información recopilada?")) {
-    const datos = await getDocs(collection(db, "detalles"));
-    // Creamos una lista de promesas de borrado para ejecutarlas todas
-    const promesas = datos.docs.map(d => deleteDoc(doc(db, "detalles", d.id)));
-    await Promise.all(promesas);
-    
-    resultadoAdmin.innerHTML = "✅ Datos borrados";
-    alert("Base de datos limpiada con éxito");
+
+  // Segunda capa: Pedir contraseña especial de borrado
+  const passMaestra = prompt("⚠️ ACCIÓN PELIGROSA: Ingresa la CONTRASEÑA DE BORRADO para vaciar la base de datos:");
+
+  if (passMaestra !== "1349164") {
+    alert("Contraseña de borrado incorrecta. Acción cancelada.");
+    return;
+  }
+
+  // Tercera capa: Confirmación final
+  if (confirm("¿Confirmas que quieres eliminar TODAS las respuestas permanentemente?")) {
+    try {
+      resultadoAdmin.innerHTML = "Limpiando base de datos...";
+      const datos = await getDocs(collection(db, "detalles"));
+      const promesas = datos.docs.map(d => deleteDoc(doc(db, "detalles", d.id)));
+      
+      await Promise.all(promesas);
+      
+      resultadoAdmin.innerHTML = "✅ Base de datos vaciada.";
+      alert("Se han eliminado todos los registros.");
+      adminPass.value = ""; // Limpiar clave
+    } catch (error) {
+      alert("Error al intentar borrar la información.");
+    }
   }
 });
