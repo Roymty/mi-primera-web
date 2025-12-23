@@ -13,41 +13,51 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* --- PANEL N: NOMBRES --- */
+// ABRIR SOBRE
+const envelope = document.getElementById('envelope');
+const abrir = () => { envelope.classList.add('open'); };
+envelope.addEventListener('click', abrir);
+envelope.addEventListener('touchstart', abrir, {passive: true});
+
+// NOMBRES
 const nInvitado = document.getElementById("nombreInvitado");
 const nAnfitrion = document.getElementById("nombreAnfitrion");
 
-async function cargarNombres() {
-    const docSnap = await getDoc(doc(db, "configuracion", "nombres"));
-    if (docSnap.exists()) {
-        nInvitado.textContent = docSnap.data().invitado;
-        nAnfitrion.textContent = docSnap.data().anfitrion;
+async function cargar() {
+    const snap = await getDoc(doc(db, "configuracion", "nombres"));
+    if (snap.exists()) {
+        nInvitado.textContent = snap.data().invitado;
+        nAnfitrion.textContent = snap.data().anfitrion;
     }
 }
-cargarNombres();
+cargar();
 
 document.getElementById("btnGuardar").onclick = async () => {
     const inv = document.getElementById("inputInvitado").value;
     const anf = document.getElementById("inputAnfitrion").value;
     if (inv && anf) {
         await setDoc(doc(db, "configuracion", "nombres"), { invitado: inv, anfitrion: anf });
-        location.reload(); // Actualización instantánea sin alerta
+        location.reload();
     }
 };
 
 document.getElementById("btnBorrarNombres").onclick = async () => {
     await deleteDoc(doc(db, "configuracion", "nombres"));
-    location.reload(); // Actualización instantánea sin alerta
+    location.reload();
 };
 
-/* --- FLUJO INVITACIÓN --- */
-document.getElementById("btnSi").onclick = () => {
+// BOTONES CARTA
+const btnSi = document.getElementById("btnSi");
+const btnNo = document.getElementById("btnNo");
+
+btnSi.onclick = (e) => {
+    e.stopPropagation();
     document.getElementById("invitacion").classList.add("oculto");
-    document.getElementById("mainCard").classList.add("compacta");
     document.getElementById("formulario").classList.remove("oculto");
 };
 
-document.getElementById("btnNo").onclick = async () => {
+btnNo.onclick = async (e) => {
+    e.stopPropagation();
     await addDoc(collection(db, "detalles"), { respuesta: "No", fecha: new Date() });
     document.getElementById("invitacion").classList.add("oculto");
     document.getElementById("mensajeNo").classList.remove("oculto");
@@ -64,40 +74,30 @@ document.getElementById("formulario").onsubmit = async (e) => {
     };
     await addDoc(collection(db, "detalles"), datos);
     document.getElementById("camposForm").classList.add("oculto");
-    document.getElementById("mensajeFinal").textContent = "¡Gracias! Todo se guardó correctamente 😊";
+    document.getElementById("mensajeFinal").innerHTML = "<b>¡Enviado con éxito!</b>";
 };
 
-/* --- PANEL A: RESPUESTAS COMPLETAS --- */
-document.getElementById("toggleNombres").onclick = () => document.getElementById("panelNombres").classList.toggle("oculto");
+// ADMIN PANELES
+document.getElementById("toggleNombres").onclick = (e) => { e.stopPropagation(); document.getElementById("panelNombres").classList.toggle("oculto"); };
 document.getElementById("adminToggle").onclick = () => document.getElementById("adminPanel").classList.toggle("oculto");
 
 document.getElementById("verDatos").onclick = async () => {
     if (document.getElementById("adminPass").value !== "1234") return;
     const res = document.getElementById("resultadoAdmin");
-    res.innerHTML = "<small>Cargando...</small>";
-    
+    res.innerHTML = "Cargando...";
     const snap = await getDocs(query(collection(db, "detalles"), orderBy("fecha", "desc")));
     res.innerHTML = "";
-    
     snap.forEach((doc) => {
         const d = doc.data();
-        const fecha = d.fecha?.toDate().toLocaleString() || "";
-        res.innerHTML += `
-            <div style="text-align:left; font-size:12px; background:#f9f9f9; padding:10px; border-radius:10px; margin-bottom:10px; border-left:3px solid #c89b7b;">
-                <b>✅ Respuesta:</b> ${d.respuesta}<br>
-                <b>🍽️ Comida:</b> ${d.comida || "-"}<br>
-                <b>📍 Lugar:</b> ${d.lugar || "-"}<br>
-                <b>📝 Obs:</b> ${d.comentario}<br>
-                <small style="color:#aaa; font-size:10px;">${fecha}</small>
-            </div>`;
+        res.innerHTML += `<div style="text-align:left; font-size:10px; border-bottom:1px solid #eee; padding:5px;">
+            <b>${d.respuesta}</b> | ${d.comida || ''} | ${d.lugar || ''}<br>${d.fecha?.toDate().toLocaleString() || ''}</div>`;
     });
 };
 
 document.getElementById("borrarDatos").onclick = async () => {
-    if (confirm("¿Borrar todo?") && prompt("Contraseña:") === "1349164") {
+    if (confirm("¿Borrar?") && prompt("Clave:") === "1349164") {
         const snap = await getDocs(collection(db, "detalles"));
         for (const d of snap.docs) await deleteDoc(doc(db, "detalles", d.id));
         location.reload();
     }
 };
-
