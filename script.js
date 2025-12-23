@@ -5,11 +5,10 @@ import {
   addDoc,
   getDocs,
   deleteDoc,
-  serverTimestamp
+  doc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ================= FIREBASE ================= */
-
 const firebaseConfig = {
   apiKey: "AIzaSyDouWz1WV4-k2b2g_S0j_o746_8dHZPtGE",
   authDomain: "invitacion-web-84d4f.firebaseapp.com",
@@ -23,143 +22,140 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 /* ================= ELEMENTOS ================= */
-
 const btnSi = document.getElementById("btnSi");
 const btnNo = document.getElementById("btnNo");
 const mensaje = document.getElementById("mensaje");
+const mensajeFinal = document.getElementById("mensajeFinal");
 const mensajeNo = document.getElementById("mensajeNo");
 const formulario = document.getElementById("formulario");
 const invitacion = document.getElementById("invitacion");
-const acciones = document.getElementById("acciones");
-const confirmarContraseñaInput = document.getElementById("confirmarContraseña");
+const card = document.querySelector(".card");
 
-/* ================= GUARDAR RESPUESTA ================= */
+/* ================= LÓGICA USUARIO ================= */
 
-async function guardarRespuesta(respuesta) {
-  await addDoc(collection(db, "respuestas"), {
-    respuesta,
-    fecha: serverTimestamp()
-  });
-
+function mostrarGracias() {
   mensaje.textContent = "Gracias por responder 😊";
   mensaje.style.opacity = 1;
-  acciones.style.display = "none";
+  btnSi.style.display = "none";
+  btnNo.style.display = "none";
+  setTimeout(() => { mensaje.style.opacity = 0; }, 1000);
 }
 
-/* ================= BOTÓN SÍ ================= */
-
-btnSi.addEventListener("click", async () => {
-  await guardarRespuesta("Sí");
-
-  // Ocultar mensaje de "Gracias por responder"
-  mensaje.style.opacity = 0;
-  
-  // Ocultar invitación
+btnSi.addEventListener("click", () => {
+  mostrarGracias();
+  card.classList.add("compacta");
   invitacion.style.display = "none";
-
-  // Mostrar formulario después de un pequeño retraso
   setTimeout(() => {
     formulario.classList.remove("oculto");
-    mensajeFinal.classList.remove("oculto");
-  }, 300);  // 300ms de retraso para dar tiempo a que se oculte el mensaje
+    mensajeFinal.style.opacity = 1;
+  }, 300);
 });
-
-/* ================= BOTÓN NO ================= */
 
 btnNo.addEventListener("click", async () => {
-  await guardarRespuesta("No");
+  mostrarGracias();
+  await addDoc(collection(db, "detalles"), { respuesta: "No", fecha: new Date() });
+  card.classList.add("compacta");
   invitacion.style.display = "none";
-  mensajeNo.classList.remove("oculto");
+  setTimeout(() => {
+    mensajeNo.classList.remove("oculto");
+    mensajeNo.style.opacity = 1;
+  }, 300);
 });
-
-/* ================= FORMULARIO ================= */
 
 formulario.addEventListener("submit", async (e) => {
   e.preventDefault();
+  
+  const comidaVal = document.getElementById("comida").value;
+  const lugarVal = document.getElementById("lugar").value;
+  const comentarioVal = document.getElementById("comentario").value;
+
+  // VALIDACIÓN: Permite letras, números y símbolos comunes, pero no SOLO números.
+  const regexBasico = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\.,'#]+$/;
+  const soloNumeros = /^\d+$/;
+
+  if (!regexBasico.test(comidaVal) || !regexBasico.test(lugarVal)) {
+    alert("Por favor, usa caracteres normales (letras, números, espacios).");
+    return;
+  }
+
+  if (soloNumeros.test(comidaVal) || soloNumeros.test(lugarVal)) {
+    alert("El nombre de la comida o el lugar debe contener letras.");
+    return;
+  }
 
   await addDoc(collection(db, "detalles"), {
-    comida: comida.value,
-    lugar: lugar.value,
-    comentario: comentario.value,
-    fecha: serverTimestamp()
+    respuesta: "Sí",
+    comida: comidaVal,
+    lugar: lugarVal,
+    comentario: comentarioVal,
+    fecha: new Date()
   });
-
-  formulario.reset();
-  formulario.classList.add("oculto");
-
+  
+  document.getElementById("comida").style.display = "none";
+  document.getElementById("lugar").style.display = "none";
+  document.getElementById("comentario").style.display = "none";
+  formulario.querySelector("button").style.display = "none";
   mensajeFinal.textContent = "Gracias, lo tomaré en cuenta 😊";
-  mensajeFinal.classList.remove("oculto");
 });
 
-/* ================= ADMIN ================= */
+/* ================= LÓGICA ADMIN ================= */
 
 const adminToggle = document.getElementById("adminToggle");
 const adminPanel = document.getElementById("adminPanel");
 const verDatos = document.getElementById("verDatos");
+const btnBorrar = document.getElementById("borrarDatos");
 const resultadoAdmin = document.getElementById("resultadoAdmin");
+const adminPass = document.getElementById("adminPass");
 
 adminToggle.addEventListener("click", () => {
-  adminPanel.style.display =
-    adminPanel.style.display === "block" ? "none" : "block";
+  adminPanel.style.display = adminPanel.style.display === "block" ? "none" : "block";
 });
 
 verDatos.addEventListener("click", async () => {
-  if (document.getElementById("adminPass").value !== "1234") {
+  if (adminPass.value !== "1234") {
     resultadoAdmin.textContent = "Acceso denegado";
     return;
   }
+  resultadoAdmin.innerHTML = "Cargando...";
+  try {
+    const datos = await getDocs(collection(db, "detalles"));
+    resultadoAdmin.innerHTML = "<strong>Respuestas:</strong><br><hr>";
+    if (datos.empty) { resultadoAdmin.innerHTML += "Sin respuestas."; return; }
 
-  resultadoAdmin.innerHTML = "<strong>📊 Respuestas</strong><br><br>";
-
-  const respuestas = await getDocs(collection(db, "respuestas"));
-  respuestas.forEach(doc => {
-    const d = doc.data();
-    resultadoAdmin.innerHTML += `✔️ ${d.respuesta}<br>`;
-  });
-
-  resultadoAdmin.innerHTML += "<hr><strong>🍽️ Detalles</strong><br><br>";
-
-  const detalles = await getDocs(collection(db, "detalles"));
-  detalles.forEach(doc => {
-    const d = doc.data();
-    resultadoAdmin.innerHTML += `
-      <div style="margin-bottom:12px">
-        🍽️ <strong>Comida:</strong> ${d.comida}<br>
-        📍 <strong>Lugar:</strong> ${d.lugar}<br>
-        💬 <strong>Comentario:</strong> ${d.comentario || "—"}
-      </div>
-    `;
-  });
+    datos.forEach(doc => {
+      const d = doc.data();
+      resultadoAdmin.innerHTML += `
+        <strong>🗳️ Respuesta:</strong> ${d.respuesta}<br>
+        ${d.comida ? `<strong>🍽️ Comida:</strong> ${d.comida}<br>` : ""}
+        ${d.lugar ? `<strong>📍 Lugar:</strong> ${d.lugar}<br>` : ""}
+        ${d.comentario ? `<strong>💬 Nota:</strong> ${d.comentario}<br>` : ""}
+        <div style="margin-top: 6px; font-size: 13px; color: #222;">
+          <strong>📅 Fecha: ${d.fecha?.toDate?.().toLocaleString() || "Sin fecha"}</strong>
+        </div>
+        <hr style="border: 0.5px solid #eee; margin: 10px 0;">
+      `;
+    });
+  } catch (e) { resultadoAdmin.innerHTML = "Error de conexión."; }
 });
 
-/* ================= BORRAR DATOS CON CONTRASEÑA ================= */
-
-const borrarDatosBtn = document.getElementById("borrarDatos");
-
-borrarDatosBtn.addEventListener("click", async () => {
-  const password = "admin123";  // Contraseña predeterminada para borrar datos
-
-  if (confirmarContraseñaInput.value !== password) {
-    alert("Contraseña incorrecta.");
+btnBorrar.addEventListener("click", async () => {
+  if (adminPass.value !== "1234") {
+    alert("Acceso denegado al panel.");
     return;
   }
 
-  if (confirm("¿Estás seguro de que deseas borrar todos los datos? Esta acción es irreversible.")) {
-    // Borrar datos de la colección "respuestas"
-    const respuestas = await getDocs(collection(db, "respuestas"));
-    respuestas.forEach(async (doc) => {
-      await deleteDoc(doc.ref);
-    });
+  // CONTRASEÑA MAESTRA SOLICITADA
+  const passMaestra = prompt("🔐 INGRESA LA CONTRASEÑA MAESTRA DE BORRADO:");
 
-    // Borrar datos de la colección "detalles"
-    const detalles = await getDocs(collection(db, "detalles"));
-    detalles.forEach(async (doc) => {
-      await deleteDoc(doc.ref);
-    });
-
-    alert("Todos los datos han sido borrados.");
-    confirmarContraseñaInput.value = "";  // Limpiar el campo de contraseña
+  if (passMaestra === "1349164") {
+    if (confirm("¿Estás seguro de borrar TODAS las respuestas? Esto es irreversible.")) {
+      const datos = await getDocs(collection(db, "detalles"));
+      const promesas = datos.docs.map(d => deleteDoc(doc(db, "detalles", d.id)));
+      await Promise.all(promesas);
+      resultadoAdmin.innerHTML = "✅ Base de datos borrada.";
+      alert("Información eliminada correctamente.");
+    }
   } else {
-    alert("Operación cancelada.");
+    alert("Contraseña maestra incorrecta.");
   }
 });
