@@ -4,17 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitación Especial</title>
-  <link rel="stylesheet" href="estilos.css?v=12">
+  <link rel="stylesheet" href="estilos.css?v=9">
 </head>
 <body>
 
 <main class="container">
   <section class="card">
+
     <div id="invitacion">
-      <h1>Hola <span id="nombreInvitado">...</span></h1>
+      <h1>Hola</h1>
       <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="corazón" class="icono">
       <p class="texto">
-        Soy <span id="nombreAnfitrion">...</span> y me gustaría invitarte a comer un día de estos,
+        Me gustaría invitarte a comer un día de estos,
         sin compromiso, solo compartir un buen momento.
       </p>
     </div>
@@ -25,19 +26,36 @@
     </div>
 
     <p id="mensaje" class="mensaje"></p>
-    <p id="mensajeNo" class="mensaje oculto">Está bien, gracias por tu sinceridad 😊</p>
+
+    <p id="mensajeNo" class="mensaje oculto">
+      Está bien, gracias por tu sinceridad 😊
+    </p>
 
     <form id="formulario" class="formulario oculto">
-      <p id="mensajeFinal" class="mensaje fade-in">Perfecto, ahora cuéntame un poco más 😊</p>
+      <p id="mensajeFinal" class="mensaje fade-in">
+        Perfecto, ahora cuéntame un poco más 😊
+      </p>
       <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required minlength="3">
       <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required minlength="3">
       <textarea id="comentario" placeholder="Algo que quieras agregar (opcional)"></textarea>
       <button type="submit">Enviar</button>
     </form>
+
   </section>
 </main>
 
-<div class="config">
-  <span id="configToggle">.</span>
-  <div class="config-panel" id="configPanel">
-    <p style="font-size: 10px; margin-bottom: 5px;">Configurar Nombres:</p
+<div class="admin">
+  <span id="adminToggle">•</span>
+  <div class="admin-panel" id="adminPanel">
+    <input type="password" id="adminPass" placeholder="Contraseña Admin">
+    <div class="admin-acciones">
+      <button id="verDatos">Ver respuestas</button>
+      <button id="borrarDatos" class="btn-borrar">Borrar Todo</button>
+    </div>
+    <div id="resultadoAdmin"></div>
+  </div>
+</div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
