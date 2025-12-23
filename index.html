@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitación Especial</title>
-  <link rel="stylesheet" href="estilos.css?v=8">
+  <link rel="stylesheet" href="estilos.css?v=9">
 </head>
 <body>
 
@@ -35,8 +35,8 @@
       <p id="mensajeFinal" class="mensaje fade-in">
         Perfecto, ahora cuéntame un poco más 😊
       </p>
-      <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required>
-      <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required>
+      <input type="text" id="comida" placeholder="¿Qué te gustaría comer?" required minlength="3">
+      <input type="text" id="lugar" placeholder="¿A dónde te gustaría ir?" required minlength="3">
       <textarea id="comentario" placeholder="Algo que quieras agregar (opcional)"></textarea>
       <button type="submit">Enviar</button>
     </form>
