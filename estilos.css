@@ -1,19 +1,20 @@
 :root {
+  --fondo: linear-gradient(135deg, #fdfbfb, #f3f1f1);
+  --texto: #2e2e2e;
+  --suave: #777;
   --acento: #c89b7b;
   --acento-hover: #b38668;
-  --texto: #333;
-  --suave: #777;
 }
 
 * {
   box-sizing: border-box;
-  font-family: Georgia, serif;
+  font-family: 'Georgia', serif;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #fdfbfb, #f1f1f1);
+  background: var(--fondo);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,6 +22,7 @@ body {
 
 .container {
   width: 100%;
+  padding: 20px;
   display: flex;
   justify-content: center;
 }
@@ -33,115 +35,109 @@ body {
   text-align: center;
   border-radius: 18px;
   box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+  transition: padding 0.4s ease;
 }
+
+.card.compacta {
+  padding-top: 25px;
+  padding-bottom: 28px;
+}
+
+h1 { font-weight: normal; color: var(--texto); }
+.texto { color: var(--suave); line-height: 1.7; }
 
 .icono {
   width: 38px;
   opacity: 0.4;
   margin-bottom: 12px;
-  animation: latido 3s infinite;
-}
-
-h1 {
-  font-weight: normal;
-  color: var(--texto);
-}
-
-.texto {
-  color: var(--suave);
-  line-height: 1.6;
+  animation: latido 3s infinite ease-in-out;
 }
 
 .acciones {
   margin-top: 30px;
   display: flex;
-  gap: 20px;
   justify-content: center;
+  gap: 18px;
 }
 
 .btn {
-  padding: 12px 28px;
+  padding: 13px 30px;
   border-radius: 30px;
   border: none;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
-.si {
-  background: var(--acento);
-  color: white;
-}
-
-.no {
-  background: transparent;
-  border: 1px solid #ccc;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
+.si { background: var(--acento); color: white; }
+.si:hover { background: var(--acento-hover); }
+.no { background: transparent; border: 1px solid #ccc; }
 
 .mensaje {
   margin-top: 25px;
-  font-style: italic;
+  color: var(--suave);
   opacity: 0;
-  transition: opacity 0.4s;
+  transition: opacity 0.4s ease;
 }
 
-.fade-in {
-  opacity: 1;
-}
+.fade-in { opacity: 1; }
 
 .formulario {
   margin-top: 25px;
+  animation: aparecer 0.5s ease;
 }
 
-.formulario input,
-.formulario textarea {
+.formulario input, .formulario textarea {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
 }
 
 .formulario button {
   margin-top: 15px;
   width: 100%;
-  padding: 10px;
+  padding: 12px;
+  border-radius: 25px;
+  border: none;
   background: var(--acento);
   color: white;
-  border: none;
-  border-radius: 25px;
-}
-
-.oculto {
-  display: none;
-}
-
-/* ADMIN */
-.admin {
-  position: fixed;
-  bottom: 12px;
-  right: 14px;
-}
-
-#adminToggle {
-  opacity: 0.3;
   cursor: pointer;
 }
 
+.oculto { display: none; }
+
+/* ADMIN STYLES */
+.admin { position: fixed; bottom: 12px; right: 14px; z-index: 100; }
+#adminToggle { cursor: pointer; opacity: 0.3; }
 .admin-panel {
   display: none;
   background: white;
-  padding: 12px;
+  padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   margin-top: 10px;
-  font-size: 0.85rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  width: 200px;
+}
+.admin-panel input { width: 100%; margin-bottom: 10px; padding: 5px; }
+.admin-acciones { display: flex; gap: 5px; }
+.admin-acciones button { flex: 1; padding: 8px; cursor: pointer; font-size: 11px; border: 1px solid #ddd; border-radius: 5px; }
+.btn-borrar { background: #fee; color: #c33; border-color: #c33 !important; }
+
+#resultadoAdmin {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 10px;
+  font-size: 12px;
+  text-align: left;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes latido {
   0%,100% { transform: scale(1); }
   50% { transform: scale(1.08); }
 }
-
-
