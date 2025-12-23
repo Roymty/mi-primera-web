@@ -107,7 +107,7 @@ h1 { font-weight: normal; color: var(--texto); }
 
 .oculto { display: none; }
 
-/* ESTILOS ADMIN */
+/* ADMIN */
 .admin { position: fixed; bottom: 12px; right: 14px; z-index: 100; }
 #adminToggle { cursor: pointer; opacity: 0.3; }
 
@@ -121,24 +121,9 @@ h1 { font-weight: normal; color: var(--texto); }
   width: 260px;
 }
 
-.admin-panel input { 
-  width: 100%; 
-  margin-bottom: 10px; 
-  padding: 8px; 
-  border: 1px solid #eee; 
-  border-radius: 5px;
-}
-
+.admin-panel input { width: 100%; margin-bottom: 10px; padding: 8px; border: 1px solid #eee; border-radius: 5px; }
 .admin-acciones { display: flex; gap: 5px; }
-.admin-acciones button { 
-  flex: 1; 
-  padding: 8px; 
-  cursor: pointer; 
-  font-size: 11px; 
-  border: 1px solid #ddd; 
-  border-radius: 5px; 
-}
-
+.admin-acciones button { flex: 1; padding: 8px; cursor: pointer; font-size: 11px; border: 1px solid #ddd; border-radius: 5px; }
 .btn-borrar { background: #fee; color: #c33; border-color: #c33 !important; font-weight: bold; }
 
 #resultadoAdmin {
