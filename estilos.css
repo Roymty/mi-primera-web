@@ -3,43 +3,129 @@
   --texto: #2e2e2e;
   --suave: #666;
   --acento: #c89b7b;
+  --color-sobre: #f5f5f5;
+  --color-solapa: #e0e0e0;
 }
 
 * { box-sizing: border-box; font-family: 'Georgia', serif; }
 
-body { margin: 0; min-height: 100vh; background: var(--fondo); display: flex; justify-content: center; align-items: center; }
+body { 
+    margin: 0; 
+    height: 100vh; 
+    background: var(--fondo); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    overflow: hidden;
+}
 
-.container { width: 100%; padding: 20px; display: flex; justify-content: center; }
+/* CONTENEDOR DEL SOBRE */
+.envelope-wrapper {
+    height: 380px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-.card { background: white; padding: 40px 30px; max-width: 400px; width: 100%; text-align: center; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); transition: all 0.5s ease; }
-.card.compacta { padding: 30px 25px; }
+#envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background-color: var(--color-sobre);
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
 
-.icono { width: 45px; opacity: 0.7; margin-bottom: 20px; animation: latido 2.5s infinite ease-in-out; }
-.acciones { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
-.btn { padding: 12px 35px; border-radius: 30px; border: none; cursor: pointer; font-size: 16px; transition: 0.3s; }
+.front {
+    position: absolute;
+    width: 0; height: 0; z-index: 10;
+}
+
+.flap {
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 82px solid transparent;
+    border-top: 110px solid var(--color-solapa);
+    transform-origin: top;
+    transition: transform 0.4s 0.4s ease;
+}
+
+.pocket {
+    border-left: 150px solid #f1f1f1;
+    border-right: 150px solid #f1f1f1;
+    border-bottom: 100px solid #e8e8e8;
+    border-top: 100px solid transparent;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+/* LA CARTA (INVITACIÓN) */
+.letter {
+    position: absolute;
+    background: white;
+    width: 90%;
+    left: 5%;
+    top: 5%;
+    height: 90%;
+    z-index: 2;
+    transition: 0.5s ease;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card {
+    padding: 20px;
+    text-align: center;
+}
+
+/* ANIMACIÓN AL ABRIR */
+#envelope.open .flap {
+    transform: rotateX(180deg);
+    transition: transform 0.4s ease;
+    z-index: 1;
+}
+
+#envelope.open .letter {
+    transform: translateY(-180px); /* Sube la carta */
+    height: auto;
+    scale: 1.15;
+    z-index: 20;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* ELEMENTOS DE LA CARTA */
+.icono { width: 40px; opacity: 0.8; margin-bottom: 15px; animation: latido 2.5s infinite; }
+.btn { padding: 10px 25px; border-radius: 20px; border: none; cursor: pointer; transition: 0.3s; margin: 5px; }
 .si { background: var(--acento); color: white; }
 .no { background: transparent; border: 1px solid #ddd; color: var(--suave); }
-
 .oculto { display: none !important; }
 
-.formulario input, .formulario textarea { width: 100%; padding: 12px; margin-top: 12px; border-radius: 10px; border: 1px solid #eee; }
-.formulario button { margin-top: 20px; width: 100%; padding: 14px; border-radius: 30px; border: none; background: var(--acento); color: white; font-weight: bold; cursor: pointer; }
+/* FORMULARIO */
+.formulario input, .formulario textarea { width: 100%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #eee; }
+.formulario button { margin-top: 15px; width: 100%; padding: 12px; border-radius: 20px; border: none; background: var(--acento); color: white; cursor: pointer; }
 
-/* ADMIN STYLES */
-.punto-secreto { cursor: pointer; opacity: 0.1; font-size: 18px; position: fixed; bottom: 15px; transition: 0.3s; }
+/* CORAZONES */
+.hearts { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 11; pointer-events: none; }
+.heart { position: absolute; bottom: 0; right: 10%; width: 15px; height: 15px; background: #c89b7b; opacity: 0; transform: rotate(45deg); }
+.heart:before, .heart:after { content: ""; position: absolute; width: 15px; height: 15px; background: #c89b7b; border-radius: 50%; }
+.heart:before { top: -7.5px; left: 0; }
+.heart:after { left: -7.5px; top: 0; }
+#envelope.open .heart { opacity: 1; animation: fly 2s ease-in infinite; }
+@keyframes fly { 0% { transform: translate(0,0) rotate(45deg); opacity: 1; } 100% { transform: translate(40px, -160px) rotate(45deg); opacity: 0; } }
+
+/* ADMIN */
+.punto-secreto { cursor: pointer; opacity: 0.05; font-size: 14px; position: fixed; bottom: 10px; transition: 0.3s; }
 .punto-secreto:hover { opacity: 1; }
-.admin-nombres-centro { left: 50%; transform: translateX(-50%); position: fixed; bottom: 15px; }
-.admin-respuestas-derecha { right: 20px; position: fixed; bottom: 15px; }
-
-.card-admin-mini, .admin-panel { background: white; padding: 15px; border-radius: 15px; border: 1px solid #eee; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); width: 280px; position: absolute; bottom: 40px; }
+.admin-nombres-centro { left: 50%; transform: translateX(-50%); position: fixed; bottom: 10px; }
+.admin-respuestas-derecha { right: 15px; position: fixed; bottom: 10px; }
+.card-admin-mini, .admin-panel { background: white; padding: 15px; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); width: 260px; position: absolute; bottom: 35px; }
 .card-admin-mini { left: 50%; transform: translateX(-50%); }
 .admin-panel { right: 0; }
-
-.acciones-admin, .admin-acciones { display: flex; gap: 8px; }
-.acciones-admin button, .admin-acciones button { flex: 1; padding: 8px; border-radius: 10px; border: none; cursor: pointer; font-size: 12px; }
-#btnGuardar, #verDatos { background: var(--acento); color: white; }
-.btn-borrar-rojo, .btn-borrar { background: #fff; border: 1px solid #d9534f; color: #d9534f; }
-
-#resultadoAdmin { max-height: 300px; overflow-y: auto; margin-top: 15px; }
+.acciones-admin button, .admin-acciones button { padding: 6px; border-radius: 8px; border: none; cursor: pointer; font-size: 11px; margin-top: 5px; }
+#btnGuardar, #verDatos { background: var(--acento); color: white; width: 100%; }
+.btn-borrar-rojo, .btn-borrar { background: #fff; border: 1px solid #d9534f; color: #d9534f; width: 100%; }
+#resultadoAdmin { max-height: 250px; overflow-y: auto; margin-top: 15px; }
 
 @keyframes latido { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
