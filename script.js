@@ -31,13 +31,13 @@ document.getElementById("btnGuardar").onclick = async () => {
     const anf = document.getElementById("inputAnfitrion").value;
     if (inv && anf) {
         await setDoc(doc(db, "configuracion", "nombres"), { invitado: inv, anfitrion: anf });
-        location.reload(); // Actualización instantánea sin alerta
+        location.reload();
     }
 };
 
 document.getElementById("btnBorrarNombres").onclick = async () => {
     await deleteDoc(doc(db, "configuracion", "nombres"));
-    location.reload(); // Actualización instantánea sin alerta
+    location.reload();
 };
 
 /* --- FLUJO INVITACIÓN --- */
@@ -67,7 +67,7 @@ document.getElementById("formulario").onsubmit = async (e) => {
     document.getElementById("mensajeFinal").textContent = "¡Gracias! Todo se guardó correctamente 😊";
 };
 
-/* --- PANEL A: RESPUESTAS COMPLETAS --- */
+/* --- PANEL A: RESPUESTAS --- */
 document.getElementById("toggleNombres").onclick = () => document.getElementById("panelNombres").classList.toggle("oculto");
 document.getElementById("adminToggle").onclick = () => document.getElementById("adminPanel").classList.toggle("oculto");
 
